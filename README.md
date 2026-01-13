@@ -8,7 +8,7 @@ Jared - https://github.com/jdube-rrc
 User 1 : "As a user, I want to be able to add my video games to my collection,  
 so that I can see what I have."  
 
-User 2 : "As a user, I want to be able to set a status of a video game, so that  
+User 2 : "As a user, I want to be able to set a completion status of a video game, so that  
 I can see what my progress is for that video game."
 
-User 3 : "As a user, I want to be able to review and rate what I have played, so that other users can see what my thoughts about the video that I have played."
+User 3 : "As a user, I want to be able to review and rate what I have played, so that other users can see what my thoughts about the video game that I have played."
