@@ -1,0 +1,57 @@
+.user-profile {
+  width: min(var(--container-max), 100%);
+  display: grid;
+  gap: var(--gap);
+
+  --border: #7F2CCB;
+  --card-bg: #2A2D43;
+
+  --border-width: 2px;
+  --radius: 8px;
+  --gap: 8px;
+
+  --container-max: 1200px;
+  --avatar-size: 210px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+}
+
+.top {
+  display: grid;
+  grid-template-columns: var(--avatar-size) 1fr;
+  gap: var(--gap);
+  align-items: stretch;
+}
+
+.card--avatar {
+  display: grid;
+  place-items: center;
+  padding: 2px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.card--biography {
+  padding: 18px 20px;
+}
+
+.biography {
+  margin: 0;
+  line-height: 1.35;
+  font-size: 16px;
+  max-width: 95%;
+}
+
+.card--content {
+  display: grid;
+  min-height: 520px;
+}
