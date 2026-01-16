@@ -1,0 +1,9 @@
+nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 2rem;
+}
+
+nav span {
+  margin: 0.5em;
+}
