@@ -1,5 +1,3 @@
-import "./Navbar.css";
-
 function Nav() {
     return(
         <nav className="flex justify-between items-center px-4 py-4 bg-neutral-900 border-b border-neutral-800">
