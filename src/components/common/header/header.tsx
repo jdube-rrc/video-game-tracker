@@ -2,9 +2,9 @@ import './header.css';
 
 function header() {
     return (
-        <header>
+        <header className="flex flex-col items-center gap-2 py-4 border-b border-neutral-800">
             <h1>Video Game Tracker</h1>
-            <span>Keep track of your video game collection!</span>
+            <p className="text-neutral-400">Keep track of your video game collection!</p>
         </header>
     );
 }
