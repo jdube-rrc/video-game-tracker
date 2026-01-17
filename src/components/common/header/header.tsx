@@ -1,6 +1,4 @@
-import './header.css';
-
-function header() {
+function Header() {
     return (
         <header className="flex flex-col items-center gap-2 py-4 border-b border-neutral-800">
             <h1>Video Game Tracker</h1>
@@ -9,4 +7,4 @@ function header() {
     );
 }
 
-export default header;
+export default Header;
