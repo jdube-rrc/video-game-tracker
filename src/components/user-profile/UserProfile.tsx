@@ -2,16 +2,16 @@ import "./UserProfile.css";
 
 function UserProfile() {
   return (
-    <section className="user-profile">
-      <div className="top">
-        <div className="card card--avatar">
-          <div className="avatar">
-            <img src="src/assets/user.png" alt="User Avatar" />
+    <section className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 lg:col-span-1">
+          <div className="flex items-center justify-center w-full h-full">
+            <img src="src/assets/user.png" alt="User Avatar" className="rounded-lg" />
           </div>
         </div>
 
-        <div className="card card--biography">
-          <p className="biography">
+        <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 lg:col-span-2">
+          <p className="text-neutral-400 leading-relaxed">
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -23,7 +23,7 @@ function UserProfile() {
         </div>
       </div>
 
-      <div className="card card--content"></div>
+      <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 min-h-96"></div>
     </section>
   );
 }
