@@ -2,7 +2,7 @@
 
 ## Project Team
 Rayn - https://github.com/Xoviax  
-Jared - https://github.com/jdube-rrc
+Jared - https://github.com/jdube-rrc  
 Muse - https://github.com/muse-a-muse
 
 ### Project General Description 
