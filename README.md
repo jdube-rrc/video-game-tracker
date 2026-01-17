@@ -3,6 +3,7 @@
 ## Project Team
 Rayn - https://github.com/Xoviax  
 Jared - https://github.com/jdube-rrc
+Muse - https://github.com/muse-a-muse
 
 ### Project General Description 
 User 1 : "As a user, I want to be able to add my video games to my collection,  
