@@ -1,7 +1,8 @@
-import Header from './components/common/header/header'
+import Header from './components/common/header/Header'
 import Nav from './components/common/nav/Navbar'
 import GameCard from './components/GameCard'
 import UserProfile from './components/user-profile/UserProfile'
+import Footer from './components/common/footer/Footer'
 import './App.css'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <UserProfile />
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
