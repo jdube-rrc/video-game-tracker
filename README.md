@@ -13,3 +13,32 @@ User 2 : "As a user, I want to be able to set a completion status of a video gam
 I can see what my progress is for that video game."
 
 User 3 : "As a user, I want to be able to review and rate what I have played, so that other users can see what my thoughts about the video game that I have played."
+
+## Kanban Items
+
+### Set up initial project structure
+Jared
+
+### Add a user profile component
+Rayn
+
+### Set up mock game data
+Rayn
+
+### Add gamecard component
+Jared
+
+### Create basic game list component with mock data
+Jared
+
+### Create header and nav components
+Rayn
+
+### Implement Tailwind
+Jared
+
+### Add basic styling and styleguide
+Jared
+
+### Prep project for Vercel deployment
+Jared
