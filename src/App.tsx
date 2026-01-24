@@ -1,5 +1,5 @@
-import Layout from './components/common/layout/Layout'
-import GameCard from './components/GameCard'
+import Layout from './components/layout/Layout'
+import GameCard from './components/common/game-card/GameCard'
 import UserProfile from './components/user-profile/UserProfile'
 import './App.css'
 
