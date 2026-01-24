@@ -3,7 +3,7 @@ import userAvatar from '../../../assets/user.png';
 function UserProfile() {
   return (
     <section className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 py-8">
         <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 lg:col-span-1">
           <div className="flex items-center justify-center w-full h-full">
             <img src={userAvatar} alt="User Avatar" className="rounded-lg" />
