@@ -1,4 +1,4 @@
-import { videoGames } from '../data/video_games';
+import { videoGames } from '../../../data/video_games';
 
 export default function GameCard() {
     return (

@@ -1,6 +1,6 @@
-import Layout from './components/common/layout/Layout'
-import GameCard from './components/GameCard'
-import UserProfile from './components/user-profile/UserProfile'
+import Layout from './components/layout/Layout'
+import GameCard from './components/common/game-card/GameCard'
+import UserProfile from './components/pages/user-profile/UserProfile'
 import './App.css'
 
 function App() {

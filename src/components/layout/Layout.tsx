@@ -1,6 +1,6 @@
-import Nav from "../nav/Navbar";
-import Header from "../header/Header";
-import Footer from "../footer/Footer";
+import Nav from "./nav/Navbar";
+import Header from "./header/Header";
+import Footer from "./footer/Footer";
 
 interface LayoutProps {
     children: React.ReactNode;
