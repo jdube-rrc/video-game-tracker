@@ -1,4 +1,4 @@
-import userAvatar from '../../assets/user.png';
+import userAvatar from '../../../assets/user.png';
 
 function UserProfile() {
   return (
