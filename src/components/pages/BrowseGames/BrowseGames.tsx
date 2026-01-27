@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
+import GameCatalog from './GameCatalog';
 
 type SearchBrowseProps = {
   visits: number;
@@ -9,7 +10,7 @@ function SearchBrowse({ visits, setVisits }: SearchBrowseProps) {
   return (
     <div className="space-y-6 text-center">
       <h1 className="text-3xl font-bold text-white">Search & Browse Games</h1>
-      <p className="text-neutral-400">Search and browse functionality coming soon...</p>
+      
       <div className="space-y-2">
         <p className="text-neutral-400">Shared visits counter: {visits}</p>
         <button
@@ -20,6 +21,8 @@ function SearchBrowse({ visits, setVisits }: SearchBrowseProps) {
           Add visit
         </button>
       </div>
+
+      <GameCatalog />
     </div>
   );
 }
