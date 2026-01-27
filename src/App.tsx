@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import HomePage from './components/pages/home-page/HomePage';
-import SearchBrowse from './components/pages/search-browse/SearchBrowse';
+import SearchBrowse from './components/pages/BrowseGames/BrowseGames';
 import GameDetails from './components/pages/game-details/GameDetails';
 import UserProfile from './components/pages/UserProfile/UserProfile';
 import Registration from './components/pages/registration/Registration';
