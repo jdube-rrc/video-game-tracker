@@ -11,6 +11,7 @@ import './App.css';
 
 function App() {
   const [favorites, setFavorites] = useState<VideoGame[]>([]);
+  const [visits, setVisits] = useState(0);
 
   const toggleFavorite = (game: VideoGame) => {
     if (favorites.some((f) => f.id === game.id)) {
@@ -20,15 +21,16 @@ function App() {
     }
   };
 
+
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/browse" element={<SearchBrowse />} />
-          <Route path="/game/:id" element={<GameDetails />} />
+          <Route path="/" element={<HomePage visits={visits} setVisits={setVisits} />} />
+          <Route path="/browse" element={<SearchBrowse visits={visits} setVisits={setVisits} />} />
+          <Route path="/game/:id" element={<GameDetails visits={visits} setVisits={setVisits} />} />
           <Route path="/profile" element={<UserProfile favorites={favorites} onToggleFavorite={toggleFavorite} />} />
-          <Route path="/registration" element={<Registration />} />
+          <Route path="/registration" element={<Registration visits={visits} setVisits={setVisits} />} />
         </Route>
       </Routes>
     </BrowserRouter>
