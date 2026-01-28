@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { videoGames, type VideoGame } from '../../../data/video_games';
+import GameCard from '../../common/game-card/GameCard';
 
 interface FavoriteGamesProps {
   favorites: VideoGame[];
@@ -60,17 +61,17 @@ export function FavoriteGames({ favorites, onToggleFavorite }: FavoriteGamesProp
             <p className="text-sm mt-2">Select a game above to start your collection.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {favorites.map(game => (
-              <div key={game.id} className="group flex items-center justify-between bg-neutral-800 p-4 rounded-lg border border-neutral-700 hover:border-purple-500/50 transition-all shadow-sm">
-                <span className="text-white font-medium truncate pr-4" title={game.name}>{game.name}</span>
+              <div key={game.id} className="relative group">
+                <GameCard game={game} />
                 <button 
                   onClick={() => onToggleFavorite(game)}
-                  className="text-neutral-400 hover:text-red-400 p-2 hover:bg-red-400/10 rounded transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                  className="absolute top-2 right-2 bg-black/70 hover:bg-red-600 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 backdrop-blur-sm"
                   aria-label="Remove from favorites"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
                 </button>
               </div>
