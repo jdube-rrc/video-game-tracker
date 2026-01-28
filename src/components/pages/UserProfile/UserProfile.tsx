@@ -1,12 +1,16 @@
 import type { Dispatch, SetStateAction } from 'react';
 import userAvatar from '../../../assets/user.png';
+import { FavoriteGames } from './FavoriteGames';
+import { type VideoGame } from '../../../data/video_games';
 
 type UserProfileProps = {
   visits: number;
   setVisits: Dispatch<SetStateAction<number>>;
+  favorites?: VideoGame[];
+  onToggleFavorite?: (game: VideoGame) => void;
 };
 
-function UserProfile({ visits, setVisits }: UserProfileProps) {
+function UserProfile({ visits, setVisits, favorites = [], onToggleFavorite = () => {} }: UserProfileProps) {
   return (
     <section className="space-y-8">
       <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 text-center space-y-2">
@@ -28,18 +32,13 @@ function UserProfile({ visits, setVisits }: UserProfileProps) {
 
         <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 lg:col-span-2">
           <p className="text-neutral-400 leading-relaxed">
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum."
           </p>
         </div>
       </div>
 
-      <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 min-h-96"></div>
+      <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 min-h-96">
+        <FavoriteGames favorites={favorites} onToggleFavorite={onToggleFavorite} />
+      </div>
     </section>
   );
 }
