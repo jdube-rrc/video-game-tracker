@@ -1582,7 +1582,7 @@ export const videoGames: VideoGame[] = [
     multiplayer: false,
   },
   {
-    id: 1877,
+    id: 58550,
     name: "Dead Cells",
     url: "https://www.igdb.com/games/dead-cells",
     synopsis: "Dead Cells is a roguelike-metroidvania action-platformer. You'll explore a sprawling, ever-changing castle... assuming you're able to fight your way past its keepers.",
