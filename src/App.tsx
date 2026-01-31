@@ -50,7 +50,7 @@ function App() {
           }
         >
           <Route path="/" element={<HomePage visits={visits} setVisits={setVisits} />} />
-          <Route path="/browse" element={<SearchBrowse visits={visits} setVisits={setVisits} />} />
+          <Route path="/browse" element={<SearchBrowse visits={visits} setVisits={setVisits} favorites={favorites} onToggleFavorite={toggleFavorite} />} />
           <Route path="/game/:id" element={<GameDetails visits={visits} setVisits={setVisits} />} />
           <Route
             path="/profile"

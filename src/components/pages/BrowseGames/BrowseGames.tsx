@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import GameCatalog from './GameCatalog';
+import type { VideoGame } from '../../../data/video_games';
 
 type SearchBrowseProps = {
   visits: number;
   setVisits: Dispatch<SetStateAction<number>>;
+  favorites: VideoGame[];
+  onToggleFavorite: (game: VideoGame) => void;
 };
 
-function SearchBrowse({ visits, setVisits }: SearchBrowseProps) {
+function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: SearchBrowseProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const normalizedSearch = searchTerm.trim();
+  const normalizedSearch: string = searchTerm.trim();
 
   return (
     <div className="space-y-6 text-center">
@@ -51,7 +54,7 @@ function SearchBrowse({ visits, setVisits }: SearchBrowseProps) {
         </div>
       </form>
 
-      <GameCatalog searchTerm={normalizedSearch} />
+      <GameCatalog searchTerm={normalizedSearch} favorites={favorites} onToggleFavorite={onToggleFavorite} />
     </div>
   );
 }
