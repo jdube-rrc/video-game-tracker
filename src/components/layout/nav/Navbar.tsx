@@ -5,6 +5,13 @@ interface NavProps {
   onToggleEdit?: () => void;
 }
 
+/**
+ * Renders the navigation bar with links and an optional edit button.
+ * 
+ * @param isEditing - Whether the profile is in editing mode.
+ * @param onToggleEdit - Function to toggle editing mode.
+ * @returns The navigation bar component.
+ */
 function Nav({ isEditing, onToggleEdit }: NavProps) {
   const location = useLocation();
 

@@ -15,6 +15,13 @@ export interface UserProfileData {
   avatarUrl: string;
 }
 
+/**
+ * The main application component that sets up routing and shared state,
+ * including a visits counter, favorite games list, and user profile data.
+ * 
+ * @returns The App component.
+ */
+
 function App() {
   const [visits, setVisits] = useState(0);
 
@@ -26,6 +33,11 @@ function App() {
     avatarUrl: userAvatarFallback,
   });
 
+  /**
+   * Toggles a game as favorite or not.
+   * 
+   * @param game - The video game object to toggle as favorite.
+   */
   const toggleFavorite = (game: VideoGame) => {
     if (favorites.some((f) => f.id === game.id)) {
       setFavorites(favorites.filter((f) => f.id !== game.id));
@@ -34,6 +46,11 @@ function App() {
     }
   };
 
+  /**
+   * Updates the user profile with the provided partial data.
+   * 
+   * @param updatedData - Partial user profile data to update.
+   */
   const handleProfileUpdate = (updatedData: Partial<UserProfileData>) => {
     setUserProfile((prev) => ({ ...prev, ...updatedData }));
   };

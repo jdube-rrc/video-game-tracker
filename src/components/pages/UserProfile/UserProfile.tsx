@@ -15,6 +15,21 @@ type UserProfileProps = {
   onUpdateUser: (data: Partial<UserProfileData>) => void;
 };
 
+/**
+ * Renders the user profile page, including a shared visits counter, avatar, bio,
+ * and favorite games section.
+ * 
+ * @param visits - The current number of visits.
+ * @param setVisits - Function to update the number of visits.
+ * @param favorites - List of favorite video games.
+ * @param onToggleFavorite - Function to toggle a game's favorite status.
+ * @param user - The user profile data.
+ * @param isEditing - Whether the profile is in editing mode.
+ * @param onUpdateUser - Function to update the user profile data.
+ * 
+ * @returns The UserProfile component. 
+ */
+
 function UserProfile({
   visits,
   setVisits,

@@ -7,6 +7,16 @@ interface FavoriteGamesProps {
   onToggleFavorite: (game: VideoGame) => void;
 }
 
+/**
+ * Renders the FavoriteGames component, allowing users to view and manage their favorite games
+ * via a dropdown selection and an add button.
+ * 
+ * @param favorites - List of favorite video games.
+ * @param onToggleFavorite - Function to toggle a game's favorite status.
+ *  
+ * @returns The FavoriteGames component.
+ */
+
 export function FavoriteGames({ favorites, onToggleFavorite }: FavoriteGamesProps) {
   const [selectedGameId, setSelectedGameId] = useState<string>("");
 

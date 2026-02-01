@@ -5,6 +5,14 @@ type GameDetailsProps = {
   setVisits: Dispatch<SetStateAction<number>>;
 };
 
+/**
+ * Renders the game details page, including a shared visits counter.
+ * 
+ * @param visits - The current number of visits.
+ * @param setVisits - Function to update the number of visits.
+ * 
+ * @returns The GameDetails component. 
+ */
 function GameDetails({ visits, setVisits }: GameDetailsProps) {
   return (
     <div className="space-y-6 text-center">
