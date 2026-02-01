@@ -2,6 +2,33 @@ import type { Dispatch, SetStateAction } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { videoGames, type VideoGame } from '../../../data/video_games';
 
+/**
+ * Formats a date string to a readable format.
+ * 
+ * @param dateString - The date string to format.
+ * 
+ * @returns The formatted date string.
+ */
+function formatReleaseDate(dateString: string): string {
+  const date = new Date(dateString);
+  const month = date.toLocaleString('en-US', { month: 'short' });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  
+  // Add suffix (st, nd, rd, th)
+  const getSuffix = (n: number): string => {
+    if (n > 3 && n < 21) return 'th';
+    switch (n % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+    }
+  };
+  
+  return `${month} ${day}${getSuffix(day)}, ${year}`;
+}
+
 type GameDetailsProps = {
   visits: number;
   setVisits: Dispatch<SetStateAction<number>>;
@@ -94,7 +121,7 @@ function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
               <div>
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{game.name}</h1>
                 <p className="text-neutral-300 text-lg">
-                  {game.developer} • Released: {game.initial_release_date}
+                  {game.developer} • Released {formatReleaseDate(game.initial_release_date)}
                 </p>
               </div>
             
@@ -156,7 +183,7 @@ function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
           
           <div>
             <h3 className="text-xs text-neutral-500 uppercase tracking-wider mb-1">Release Date</h3>
-            <p className="text-neutral-200">{game.initial_release_date}</p>
+            <p className="text-neutral-200">{formatReleaseDate(game.initial_release_date)}</p>
           </div>
           
           <div>
