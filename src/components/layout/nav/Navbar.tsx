@@ -13,8 +13,7 @@ interface NavProps {
  * @returns The navigation bar component.
  */
 function Nav({ isEditing, onToggleEdit }: NavProps) {
-  const location = useLocation();
-
+  const location = useLocation(); // Retrieves the current route location
   const isProfilePage = location.pathname === "/profile";
 
   return (
