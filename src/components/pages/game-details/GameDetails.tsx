@@ -9,6 +9,17 @@ type GameDetailsProps = {
   onToggleFavorite?: (game: VideoGame) => void;
 };
 
+/**
+ * Renders the game details page for a specific video game, displaying its 
+ * artwork, synopsis, ratings, platforms, genres, and favorite toggling functionality.
+ * 
+ * @param visits - The current number of visits.
+ * @param setVisits - Function to update the number of visits.
+ * @param favorites - List of favorite video games.
+ * @param onToggleFavorite - Function to toggle a game's favorite status.
+ * 
+ * @returns The GameDetails component.
+ */
 function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
   const { id } = useParams<{ id: string }>();
   const game = videoGames.find((g) => g.id === Number(id));
