@@ -10,6 +10,17 @@ type SearchBrowseProps = {
   onToggleFavorite: (game: VideoGame) => void;
 };
 
+/**
+ * Renders the search and browse games page, including a shared visits counter,
+ * search input, and a catalog of games with favorite toggling functionality.
+ * 
+ * @param visits - The current number of visits.
+ * @param setVisits - Function to update the number of visits.
+ * @param favorites - List of favorite video games.
+ * @param onToggleFavorite - Function to toggle a game's favorite status.
+ * 
+ * @returns The SearchBrowse component.
+ */
 function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: SearchBrowseProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const normalizedSearch: string = searchTerm.trim();

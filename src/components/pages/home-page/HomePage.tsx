@@ -5,6 +5,14 @@ type HomePageProps = {
   setVisits: Dispatch<SetStateAction<number>>;
 };
 
+/**
+ * Renders the home page, including a shared visits counter.
+ * 
+ * @param visits - The current number of visits.
+ * @param setVisits - Function to update the number of visits.
+ * 
+ * @returns The HomePage component. 
+ */
 function HomePage({ visits, setVisits }: HomePageProps) {
   return (
     <div className="space-y-6 text-center">

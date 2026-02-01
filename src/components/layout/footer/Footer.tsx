@@ -1,3 +1,8 @@
+/**
+ * A simple footer component displaying copyright information.
+ * 
+ * @returns the Footer component.
+ */
 function Footer() {
     return (
         <footer className="flex flex-col items-center gap-2 py-2">

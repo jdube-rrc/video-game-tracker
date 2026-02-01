@@ -21,6 +21,18 @@ type RegistrationFormProps = {
   };
 };
 
+/**
+ * Renders the registration form for creating a player profile. This includes
+ * fields for display name, email, and an optional tagline, along with
+ * validation error messages.
+ * 
+ * @param formState - The current state of the registration form.
+ * @param setFormState - Function to update the registration form state.
+ * @param errors - Validation error messages for the form fields.
+ * 
+ * @returns The RegistrationForm component.
+ */
+
 function RegistrationForm({ formState, setFormState, errors }: RegistrationFormProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -78,6 +90,17 @@ function RegistrationForm({ formState, setFormState, errors }: RegistrationFormP
     </div>
   );
 }
+
+/**
+ * Renders the registration page, allowing users to create a player profile
+ * with a display name, email, tagline, and favorite genres. Also includes
+ * a shared visits counter.
+ * 
+ * @param visits - The current number of visits.
+ * @param setVisits - Function to update the number of visits.
+ * 
+ * @returns The Registration component.
+ */
 
 function Registration({ visits, setVisits }: RegistrationProps) {
   const [formState, setFormState] = useState<RegistrationFormState>({
