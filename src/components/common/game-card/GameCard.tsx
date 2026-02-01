@@ -6,6 +6,16 @@ type GameCardProps = {
     onToggleFavorite?: (game: VideoGame) => void;
 };
 
+/**
+ * Renders a card component for a video game, displaying its artwork, name, 
+ * favorite status, and a link to view more details on IGDB.
+ * 
+ * @param game - The video game object to display.
+ * @param isFavorite - Whether the game is marked as a favorite.
+ * @param onToggleFavorite - Function to toggle the game's favorite status.
+ * 
+ * @returns The GameCard component.
+ */
 export default function GameCard({ game, isFavorite = false, onToggleFavorite }: GameCardProps) {
     return (
         <article className="relative rounded-lg overflow-hidden border border-neutral-800 hover:border-neutral-700 transition-colors aspect-3/4 group">
