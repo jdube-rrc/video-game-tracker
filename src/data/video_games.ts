@@ -14,6 +14,7 @@ export interface VideoGame {
   platforms: string[];
   genre: string[];
   multiplayer: boolean;
+  trailer_url?: string;
 }
 
 export const videoGames: VideoGame[] = [
@@ -275,6 +276,7 @@ export const videoGames: VideoGame[] = [
       "Adventure",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/6XGeJwsUP9c",
   },
   {
     id: 152887,

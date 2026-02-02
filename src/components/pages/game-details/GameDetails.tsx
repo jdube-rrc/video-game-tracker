@@ -83,78 +83,93 @@ function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
 
         {/* Content container */}
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-8">
-          <div className="flex flex-col md:flex-row gap-8">
-            {/* Cover Art */}
-            <div className="relative shrink-0">
-              <img 
-                src={game.artwork_url} 
-                alt={game.name}
-                className="w-48 md:w-64 rounded-lg shadow-2xl border border-neutral-700"
-              />
-              {/* Favorite Button */}
-              {onToggleFavorite && (
-                <button
-                  type="button"
-                  onClick={() => onToggleFavorite(game)}
-                  className={`absolute top-2 right-2 z-20 p-2 rounded-full transition-colors ${
-                    isFavorite
-                      ? 'bg-red-500 text-white'
-                      : 'bg-black/50 text-neutral-300 hover:bg-black/70 hover:text-white'
-                  }`}
-                  aria-label={isFavorite ? `Remove ${game.name} from favorites` : `Add ${game.name} to favorites`}
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill={isFavorite ? 'currentColor' : 'none'}
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    className="w-5 h-5"
+          {/* Title */}
+          <div className="text-center mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{game.name}</h1>
+            <p className="text-neutral-300 text-lg">
+              {game.developer} • Released {formatReleaseDate(game.initial_release_date)}
+            </p>
+          </div>
+
+          {/* Media Row: Cover Art + Buttons | Trailer */}
+          <div className="flex flex-col md:flex-row gap-6 items-stretch">
+            {/* Left Column: Cover Art + Scores + Buttons */}
+            <div className="shrink-0 flex flex-col gap-3 w-48 md:w-56">
+              {/* Cover Art */}
+              <div className="relative flex-1 min-h-0">
+                <img 
+                  src={game.artwork_url} 
+                  alt={game.name}
+                  className="w-full h-full rounded-lg shadow-2xl border border-neutral-700 object-cover"
+                />
+                {/* Favorite Button */}
+                {onToggleFavorite && (
+                  <button
+                    type="button"
+                    onClick={() => onToggleFavorite(game)}
+                    className={`absolute top-2 right-2 z-20 p-2 rounded-full transition-colors ${
+                      isFavorite
+                        ? 'bg-red-500 text-white'
+                        : 'bg-black/50 text-neutral-300 hover:bg-black/70 hover:text-white'
+                    }`}
+                    aria-label={isFavorite ? `Remove ${game.name} from favorites` : `Add ${game.name} to favorites`}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                  </svg>
-                </button>
-              )}
-            </div>
-          
-            {/* Title & Quick Info */}
-            <div className="flex flex-col justify-end space-y-4">
-              <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">{game.name}</h1>
-                <p className="text-neutral-300 text-lg">
-                  {game.developer} • Released {formatReleaseDate(game.initial_release_date)}
-                </p>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill={isFavorite ? 'currentColor' : 'none'}
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      className="w-5 h-5"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                  </button>
+                )}
               </div>
-            
+
               {/* Ratings */}
-              <div className="flex gap-6">
-                <div className="bg-neutral-900/80 backdrop-blur-sm rounded-lg px-4 py-3 border border-neutral-700">
-                  <p className="text-xs text-neutral-400 uppercase tracking-wider">Critic Score</p>
-                  <p className="text-2xl font-bold text-white">{game.avg_critic_rating.toFixed(1)}</p>
+              <div className="flex gap-2 w-full">
+                <div className="flex-1 bg-neutral-900/80 backdrop-blur-sm rounded-lg px-3 py-2 border border-neutral-700 text-center">
+                  <p className="text-xs text-neutral-400 uppercase tracking-wider">Critic</p>
+                  <p className="text-xl font-bold text-white">{game.avg_critic_rating.toFixed(1)}</p>
                 </div>
-                <div className="bg-neutral-900/80 backdrop-blur-sm rounded-lg px-4 py-3 border border-neutral-700">
-                  <p className="text-xs text-neutral-400 uppercase tracking-wider">User Score</p>
-                  <p className="text-2xl font-bold text-white">{game.avg_user_rating.toFixed(1)}</p>
+                <div className="flex-1 bg-neutral-900/80 backdrop-blur-sm rounded-lg px-3 py-2 border border-neutral-700 text-center">
+                  <p className="text-xs text-neutral-400 uppercase tracking-wider">User</p>
+                  <p className="text-xl font-bold text-white">{game.avg_user_rating.toFixed(1)}</p>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex gap-4 pt-2">
-                <a 
-                  href={game.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200 transition-colors"
-                >
-                  View on IGDB
-                </a>
-                <Link 
-                  to="/browse"
-                  className="px-6 py-3 bg-neutral-800 text-white rounded-md font-medium hover:bg-neutral-700 transition-colors border border-neutral-700"
-                >
-                  Back to Browse
-                </Link>
-              </div>
+              {/* Action Buttons - stacked */}
+              <a 
+                href={game.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200 transition-colors text-center text-sm"
+              >
+                View on IGDB
+              </a>
+              <Link 
+                to="/browse"
+                className="w-full px-4 py-2 bg-neutral-800 text-white rounded-md font-medium hover:bg-neutral-700 transition-colors border border-neutral-700 text-center text-sm"
+              >
+                Back to Browse
+              </Link>
             </div>
+
+            {/* Right Column: Trailer */}
+            {game.trailer_url && (
+              <div className="flex-1 aspect-video rounded-lg overflow-hidden border border-neutral-700 shadow-lg">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={game.trailer_url}
+                  title={`${game.name} Trailer`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
