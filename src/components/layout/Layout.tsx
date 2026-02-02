@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Nav from "./nav/Navbar";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
@@ -17,11 +17,15 @@ interface LayoutProps {
  * @returns The layout component wrapping all pages.
  */
 function Layout({ isEditing = false, onToggleEdit }: LayoutProps) {
+  const location = useLocation();
+  const isGameDetailsPage = location.pathname.startsWith("/game/");
+
   return (
     <div className="flex flex-col min-h-screen bg-neutral-950">
       <Nav isEditing={isEditing} onToggleEdit={onToggleEdit} />
-      <div className="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
-        <Header />
+      {/* removes header on game details page for a cleaner look */}
+      <div className={`max-w-6xl mx-auto px-4 flex-1 w-full ${isGameDetailsPage ? 'pb-8' : 'py-8'}`}>
+        {!isGameDetailsPage && <Header />}
         <main className="space-y-8">
           <Outlet />
         </main>
