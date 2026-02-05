@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { type VideoGame } from '../../../data/video_games';
-import { searchGames, getRandomSample, isGameFavorite } from '../../../services/gameService';
+import { searchGames, sortAlphabetically, getRandomSample, isGameFavorite } from '../../../services/gameService';
 import GameCard from '../../common/game-card/GameCard';
 
 type GameCatalogProps = {
@@ -19,10 +19,14 @@ type GameCatalogProps = {
  * @returns The GameCatalog component.
  */
 export default function GameCatalog({ searchTerm = '', favorites = [], onToggleFavorite }: GameCatalogProps) {
-    // useMemo remembers the shuffled games to avoid reshuffling on every render,
-    // this is to avoid expensive computations on each key stroke in the search input
+    // useMemo remembers the games to avoid recomputing on every render
+    // Initial load (no search): random 20 games
+    // With search: alphabetically sorted results
     const displayedGames: VideoGame[] = useMemo(() => {
         const filtered = searchGames(searchTerm);
+        if (searchTerm.trim()) {
+            return sortAlphabetically(filtered);
+        }
         return getRandomSample(filtered, 20);
     }, [searchTerm]); // will only recompute if searchTerm changes
 

@@ -73,6 +73,18 @@ export function getRandomSample(games: VideoGame[], count: number): VideoGame[] 
 }
 
 /**
+ * Sorts games alphabetically by name (case-insensitive).
+ * 
+ * @param games - The array of games to sort.
+ * @returns A new array sorted alphabetically by name.
+ */
+export function sortAlphabetically(games: VideoGame[]): VideoGame[] {
+  return [...games].sort((a, b) => 
+    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+  );
+}
+
+/**
  * Checks if a game is in a favorites list.
  * 
  * @param gameId - The ID of the game to check.

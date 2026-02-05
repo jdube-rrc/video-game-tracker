@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import GameCatalog from './GameCatalog';
 import type { VideoGame } from '../../../data/video_games';
@@ -23,7 +23,28 @@ type SearchBrowseProps = {
  */
 function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: SearchBrowseProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const normalizedSearch: string = searchTerm.trim();
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Debounce the search term - waits 300ms after user stops typing
+  // Then triggers fade-out, updates search, and fades back in
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const trimmed = searchTerm.trim();
+      if (trimmed.length >= 2 || trimmed.length === 0) {
+        // Start fade-out
+        setIsTransitioning(true);
+        // After fade-out completes (150ms), update search results
+        setTimeout(() => {
+          setDebouncedSearch(trimmed);
+          // Small delay then fade back in
+          setTimeout(() => setIsTransitioning(false), 50);
+        }, 150);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   return (
     <div className="space-y-6 text-center">
@@ -65,7 +86,11 @@ function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: Search
         </div>
       </form>
 
-      <GameCatalog searchTerm={normalizedSearch} favorites={favorites} onToggleFavorite={onToggleFavorite} />
+      <div 
+        className={`transition-opacity duration-150 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
+      >
+        <GameCatalog searchTerm={debouncedSearch} favorites={favorites} onToggleFavorite={onToggleFavorite} />
+      </div>
     </div>
   );
 }
