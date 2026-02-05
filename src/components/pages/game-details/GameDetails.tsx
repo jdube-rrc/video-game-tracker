@@ -1,33 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { videoGames, type VideoGame } from '../../../data/video_games';
-
-/**
- * Formats a date string to a readable format.
- * 
- * @param dateString - The date string to format.
- * 
- * @returns The formatted date string.
- */
-function formatReleaseDate(dateString: string): string {
-  const date = new Date(dateString);
-  const month = date.toLocaleString('en-US', { month: 'short' });
-  const day = date.getDate();
-  const year = date.getFullYear();
-  
-  // Add suffix (st, nd, rd, th)
-  const getSuffix = (n: number): string => {
-    if (n > 3 && n < 21) return 'th';
-    switch (n % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
-    }
-  };
-  
-  return `${month} ${day}${getSuffix(day)}, ${year}`;
-}
+import { type VideoGame } from '../../../data/video_games';
+import { getGameById, formatReleaseDate, isGameFavorite } from '../../../services/gameService';
 
 type GameDetailsProps = {
   visits: number;
@@ -49,8 +23,8 @@ type GameDetailsProps = {
  */
 function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
   const { id } = useParams<{ id: string }>();
-  const game = videoGames.find((g) => g.id === Number(id));
-  const isFavorite = game ? favorites.some((f) => f.id === game.id) : false;
+  const game = getGameById(Number(id));
+  const isFavorite = game ? isGameFavorite(game.id, favorites) : false;
 
   if (!game) {
     return (
