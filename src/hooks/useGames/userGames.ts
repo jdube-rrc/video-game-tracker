@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { videoGames, type VideoGame } from '../../data/video_games';
 
 /**
@@ -8,7 +8,7 @@ import { videoGames, type VideoGame } from '../../data/video_games';
  * @returns An object containing the list of games and utility functions to access them.
  */
 export function useGames() {
-  const [games, setGames] = useState<VideoGame[]>(videoGames);
+  const [games] = useState<VideoGame[]>(videoGames);
 
   const getGameById = (id: number): VideoGame | undefined => {
     return games.find((game) => game.id === id);
