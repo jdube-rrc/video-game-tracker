@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import HomePage from "./components/pages/home-page/HomePage";
 import SearchBrowse from "./components/pages/BrowseGames/BrowseGames";
-import GameDetails from "./components/pages/game-details/GameDetails";
+import GameDetails from "./components/pages/GameDetails/GameDetails";
 import UserProfile from "./components/pages/UserProfile/UserProfile";
 import Registration from "./components/pages/registration/Registration";
 import userAvatarFallback from "./assets/user.png";
@@ -22,7 +22,6 @@ export interface UserProfileData {
  *
  * @returns The App component.
  */
-
 function App() {
   const { visitCount, incrementVisits } = useVisits();
 
