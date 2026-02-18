@@ -6,10 +6,10 @@ import SearchBrowse from "./components/pages/BrowseGames/BrowseGames";
 import GameDetails from "./components/pages/game-details/GameDetails";
 import UserProfile from "./components/pages/UserProfile/UserProfile";
 import Registration from "./components/pages/registration/Registration";
-import { type VideoGame } from "./data/video_games";
 import userAvatarFallback from "./assets/user.png";
 import "./App.css";
 import { useVisits } from "./hooks/useVisits/userVisits";
+import { useFavorites } from "./hooks/useFavorites/userFavorites";
 
 export interface UserProfileData {
   bio: string;
@@ -26,26 +26,13 @@ export interface UserProfileData {
 function App() {
   const { visitCount, incrementVisits } = useVisits();
 
-  const [favorites, setFavorites] = useState<VideoGame[]>([]);
+  const { favorites, toggleFavorite } = useFavorites();
 
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfileData>({
     bio: "This is a placeholder bio. Click edit to tell the world about your gaming habits!",
     avatarUrl: userAvatarFallback,
   });
-
-  /**
-   * Toggles a game as favorite or not.
-   *
-   * @param game - The video game object to toggle as favorite.
-   */
-  const toggleFavorite = (game: VideoGame) => {
-    if (favorites.some((f) => f.id === game.id)) {
-      setFavorites(favorites.filter((f) => f.id !== game.id));
-    } else {
-      setFavorites([...favorites, game]);
-    }
-  };
 
   /**
    * Updates the user profile with the provided partial data.
