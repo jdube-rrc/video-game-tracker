@@ -1,0 +1,1 @@
+# Architectural Layout: Platform & Hardware Compatibility Log

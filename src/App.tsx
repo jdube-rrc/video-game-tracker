@@ -6,6 +6,7 @@ import SearchBrowse from "./components/pages/BrowseGames/BrowseGames";
 import GameDetails from "./components/pages/GameDetails/GameDetails";
 import UserProfile from "./components/pages/UserProfile/UserProfile";
 import Registration from "./components/pages/registration/Registration";
+import PlatformHardwareLog from "./components/common/PlatformHardwareLog/PlatformHardwareLog";
 import userAvatarFallback from "./assets/user.png";
 import "./App.css";
 import { useVisits } from "./hooks/useVisits/userVisits";
@@ -55,7 +56,9 @@ function App() {
         >
           <Route
             path="/"
-            element={<HomePage visits={visitCount} setVisits={incrementVisits} />}
+            element={
+              <HomePage visits={visitCount} setVisits={incrementVisits} />
+            }
           />
           <Route
             path="/browse"
@@ -95,8 +98,11 @@ function App() {
           />
           <Route
             path="/registration"
-            element={<Registration visits={visitCount} setVisits={incrementVisits} />}
+            element={
+              <Registration visits={visitCount} setVisits={incrementVisits} />
+            }
           />
+          <Route path="/hardware-logs" element={<PlatformHardwareLog />} />
         </Route>
       </Routes>
     </BrowserRouter>
