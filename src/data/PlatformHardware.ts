@@ -5,6 +5,7 @@ export interface HardwareLog {
   os: string;
   hardwareSpecs: string;
   averageFps: number;
+  artwork_url?: string;
 }
 
 export const hardwareData: HardwareLog[] = [
@@ -16,6 +17,8 @@ export const hardwareData: HardwareLog[] = [
     os: "Arch Linux",
     hardwareSpecs: "i7-14700KF, 32GB RAM, RTX 4070",
     averageFps: 180,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/cobkfz.jpeg",
   },
   {
     id: 2,
@@ -25,6 +28,8 @@ export const hardwareData: HardwareLog[] = [
     os: "Debian 13",
     hardwareSpecs: "Ryzen 5 3600, 32GB RAM",
     averageFps: 60,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/co7n02.webp",
   },
   {
     id: 3,
@@ -34,6 +39,8 @@ export const hardwareData: HardwareLog[] = [
     os: "Windows 11",
     hardwareSpecs: "MSI GE75 Raider 9SE",
     averageFps: 55,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/coaih8.jpg",
   },
   {
     id: 4,
@@ -42,6 +49,8 @@ export const hardwareData: HardwareLog[] = [
     os: "Windows 11",
     hardwareSpecs: "i7-14700KF, 32GB RAM, RTX 4070",
     averageFps: 144,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/cobc7s.webp",
   },
   {
     id: 5,
@@ -50,6 +59,8 @@ export const hardwareData: HardwareLog[] = [
     os: "NixOS",
     hardwareSpecs: "ThinkPad T480",
     averageFps: 60,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/coa77e.jpg",
   },
   {
     id: 6,
@@ -58,6 +69,8 @@ export const hardwareData: HardwareLog[] = [
     os: "Windows 11",
     hardwareSpecs: "RTX 4070, Oculus Rift S",
     averageFps: 80,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/co87vg.webp",
   },
   {
     id: 7,
@@ -66,6 +79,8 @@ export const hardwareData: HardwareLog[] = [
     os: "Arch Linux",
     hardwareSpecs: "i7-14700KF, RTX 4070",
     averageFps: 60,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.jpg",
   },
   {
     id: 8,
@@ -74,6 +89,8 @@ export const hardwareData: HardwareLog[] = [
     os: "Windows 11",
     hardwareSpecs: "i7-14700KF, RTX 4070",
     averageFps: 400,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/coau39.jpg",
   },
   {
     id: 9,
@@ -82,6 +99,8 @@ export const hardwareData: HardwareLog[] = [
     os: "Windows 11",
     hardwareSpecs: "RTX 4070, Oculus Rift S",
     averageFps: 80,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/co20ux.webp",
   },
   {
     id: 10,
@@ -90,5 +109,7 @@ export const hardwareData: HardwareLog[] = [
     os: "NixOS",
     hardwareSpecs: "ThinkPad T480",
     averageFps: 60,
+    artwork_url:
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/coaamg.jpg",
   },
 ];

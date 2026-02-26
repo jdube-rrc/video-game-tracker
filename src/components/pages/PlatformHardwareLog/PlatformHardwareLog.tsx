@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useHardwareLogs } from "../../../hooks/usePlatformHardwareLogs/userPlatformHardwareLogs";
-import { videoGames } from "../../../data/video_games";
+import { videoGames, type VideoGame } from "../../../data/video_games";
 
 /**
  * Component for displaying and submitting hardware compatibility logs.
@@ -16,6 +16,7 @@ export default function PlatformHardwareLog() {
   const [hardwareSpecs, setHardwareSpecs] = useState("");
   const [averageFps, setAverageFps] = useState<number>(60);
   const [reviewText, setReviewText] = useState("");
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Search Data State
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -43,17 +44,38 @@ export default function PlatformHardwareLog() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleGameSelect = (name: string) => {
-    setGameTitle(name);
+  const handleGameSelect = (game: VideoGame) => {
+    setGameTitle(game.name);
     setIsDropdownOpen(false);
+    setFormError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
     if (!gameTitle.trim()) return;
 
+    // Validate that the game exists in our database
+    const selectedGame = videoGames.find(
+      (g) => g.name.toLowerCase() === gameTitle.trim().toLowerCase(),
+    );
+
+    if (!selectedGame) {
+      setFormError("Invalid Game Title, Please pick from the dropdown");
+      return;
+    }
+
     // Pass the flat data object to the hook
-    await addLog({ gameTitle, os, hardwareSpecs, averageFps, reviewText });
+    // Use the found game's artwork if explicit selection was cleared but name matches
+    await addLog({
+      gameTitle: selectedGame.name,
+      os,
+      hardwareSpecs,
+      averageFps,
+      reviewText,
+      artwork_url: selectedGame.artwork_url,
+    });
 
     // Clear the form after submission
     setGameTitle("");
@@ -61,6 +83,13 @@ export default function PlatformHardwareLog() {
     setHardwareSpecs("");
     setAverageFps(60);
     setReviewText("");
+  };
+
+  // If user types manually, clear the artwork unless it matches
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGameTitle(e.target.value);
+    setIsDropdownOpen(true);
+    if (formError) setFormError(null);
   };
 
   if (isLoading) {
@@ -83,13 +112,6 @@ export default function PlatformHardwareLog() {
         </p>
       </header>
 
-      {/* Display Business Logic Errors */}
-      {error && (
-        <div className="bg-red-900/50 border border-red-800 text-red-200 p-4 rounded-lg">
-          {error}
-        </div>
-      )}
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Side: The Form */}
         <div className="lg:col-span-1">
@@ -106,10 +128,7 @@ export default function PlatformHardwareLog() {
                   placeholder="Search for a game..."
                   className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
                   value={gameTitle}
-                  onChange={(e) => {
-                    setGameTitle(e.target.value);
-                    setIsDropdownOpen(true);
-                  }}
+                  onChange={handleTitleChange}
                   onFocus={() => setIsDropdownOpen(true)}
                   required
                 />
@@ -120,13 +139,13 @@ export default function PlatformHardwareLog() {
                     {derivedGames.map((game) => (
                       <li
                         key={game.id}
-                        onClick={() => handleGameSelect(game.name)}
+                        onClick={() => handleGameSelect(game)}
                         className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-700 cursor-pointer text-white border-b border-neutral-700 last:border-0 transition-colors"
                       >
-                        <img 
-                          src={game.artwork_url} 
-                          alt={game.name} 
-                          className="w-10 h-14 object-cover rounded bg-neutral-900" 
+                        <img
+                          src={game.artwork_url}
+                          alt={game.name}
+                          className="w-10 h-14 object-cover rounded bg-neutral-900"
                         />
                         <span className="font-medium">{game.name}</span>
                       </li>
@@ -198,6 +217,13 @@ export default function PlatformHardwareLog() {
                 Submit Log
               </button>
             </form>
+            
+            {/* Display Business Logic Errors */}
+            {(error || formError) && (
+              <div className="bg-red-900/50 border border-red-800 text-red-200 p-4 rounded-lg mt-4">
+                {error || formError}
+              </div>
+            )}
           </div>
         </div>
 
@@ -216,37 +242,51 @@ export default function PlatformHardwareLog() {
               {logs.map((log) => (
                 <div
                   key={log.id}
-                  className="bg-neutral-900 p-5 rounded-xl border border-neutral-800 hover:border-neutral-700 transition-colors group"
+                  className="bg-neutral-900 p-5 rounded-xl border border-neutral-800 hover:border-neutral-700 transition-colors group flex gap-5"
                 >
-                  <div className="flex justify-between items-start mb-3">
-                    <h4 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
-                      {log.gameTitle}
-                    </h4>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        log.averageFps >= 60
-                          ? "bg-green-900/30 text-green-400 border border-green-900"
-                          : log.averageFps >= 30
-                            ? "bg-yellow-900/30 text-yellow-400 border border-yellow-900"
-                            : "bg-red-900/30 text-red-400 border border-red-900"
-                      }`}
-                    >
-                      {log.averageFps} FPS
-                    </span>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-4 text-sm">
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-neutral-800 text-neutral-300 border border-neutral-700">
-                      <span className="text-neutral-500">OS:</span> {log.os}
+                  {/* Artwork Column */}
+                  {log.artwork_url && (
+                    <div className="flex-shrink-0">
+                      <img
+                        src={log.artwork_url}
+                        alt={log.gameTitle}
+                        className="w-16 h-24 object-cover rounded bg-neutral-800 shadow-md border border-neutral-800"
+                      />
                     </div>
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-neutral-800 text-neutral-300 border border-neutral-700">
-                      <span className="text-neutral-500">HW:</span>{" "}
-                      {log.hardwareSpecs}
-                    </div>
-                  </div>
+                  )}
 
-                  <div className="bg-neutral-800/50 p-3 rounded-lg border border-neutral-800 text-neutral-300 text-sm leading-relaxed">
-                    {log.reviewText}
+                  {/* Content Column */}
+                  <div className="flex-grow">
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                        {log.gameTitle}
+                      </h4>
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          log.averageFps >= 60
+                            ? "bg-green-900/30 text-green-400 border border-green-900"
+                            : log.averageFps >= 30
+                              ? "bg-yellow-900/30 text-yellow-400 border border-yellow-900"
+                              : "bg-red-900/30 text-red-400 border border-red-900"
+                        }`}
+                      >
+                        {log.averageFps} FPS
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-4 text-sm">
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-neutral-800 text-neutral-300 border border-neutral-700">
+                        <span className="text-neutral-500">OS:</span> {log.os}
+                      </div>
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-neutral-800 text-neutral-300 border border-neutral-700">
+                        <span className="text-neutral-500">HW:</span>{" "}
+                        {log.hardwareSpecs}
+                      </div>
+                    </div>
+
+                    <div className="bg-neutral-800/50 p-3 rounded-lg border border-neutral-800 text-neutral-300 text-sm leading-relaxed">
+                      {log.reviewText}
+                    </div>
                   </div>
                 </div>
               ))}
