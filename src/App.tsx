@@ -6,7 +6,7 @@ import SearchBrowse from "./components/pages/BrowseGames/BrowseGames";
 import GameDetails from "./components/pages/GameDetails/GameDetails";
 import UserProfile from "./components/pages/UserProfile/UserProfile";
 import Registration from "./components/pages/registration/Registration";
-import PlatformHardwareLog from "./components/common/PlatformHardwareLog/PlatformHardwareLog";
+import PlatformHardwareLog from "./components/pages/PlatformHardwareLog/PlatformHardwareLog";
 import userAvatarFallback from "./assets/user.png";
 import "./App.css";
 import { useVisits } from "./hooks/useVisits/userVisits";

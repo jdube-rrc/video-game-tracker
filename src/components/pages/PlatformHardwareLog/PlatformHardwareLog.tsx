@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useHardwareLogs } from "../../../hooks/usePlatformHardwareLogs/userPlatformHardwareLogs";
+import { videoGames } from "../../../data/video_games";
 
 /**
  * Component for displaying and submitting hardware compatibility logs.
@@ -9,21 +10,56 @@ export default function PlatformHardwareLog() {
   // Destructure everything we need from our custom hook
   const { logs, isLoading, error, addLog } = useHardwareLogs();
 
-  // Local state just for the form inputs
+  // Local state for the form inputs
   const [gameTitle, setGameTitle] = useState("");
   const [os, setOs] = useState("");
   const [hardwareSpecs, setHardwareSpecs] = useState("");
   const [averageFps, setAverageFps] = useState<number>(60);
   const [reviewText, setReviewText] = useState("");
 
+  // Search Data State
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Filter games based on input
+  const derivedGames = useMemo(() => {
+    if (!gameTitle) return [];
+    return videoGames
+      .filter((g) => g.name.toLowerCase().includes(gameTitle.toLowerCase()))
+      .slice(0, 5); // Limit to top 5 results
+  }, [gameTitle]);
+
+  // Closes dropdown if user clicks outside of it
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleGameSelect = (name: string) => {
+    setGameTitle(name);
+    setIsDropdownOpen(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!gameTitle.trim()) return;
+
     // Pass the flat data object to the hook
     await addLog({ gameTitle, os, hardwareSpecs, averageFps, reviewText });
 
     // Clear the form after submission
     setGameTitle("");
+    setOs("");
     setHardwareSpecs("");
+    setAverageFps(60);
     setReviewText("");
   };
 
@@ -56,22 +92,47 @@ export default function PlatformHardwareLog() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Side: The Form */}
-        <div className="lg:col-span-1 space-y-6">
+        <div className="lg:col-span-1">
           <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 sticky top-6">
             <h3 className="text-xl font-bold text-white mb-4">Submit a Log</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+              {/* Game Title Dropdown Search */}
+              <div className="relative" ref={dropdownRef}>
                 <label className="block text-sm font-medium text-neutral-400 mb-1">
                   Game Title
                 </label>
                 <input
                   type="text"
-                  placeholder="E.g. Elden Ring"
+                  placeholder="Search for a game..."
                   className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
                   value={gameTitle}
-                  onChange={(e) => setGameTitle(e.target.value)}
+                  onChange={(e) => {
+                    setGameTitle(e.target.value);
+                    setIsDropdownOpen(true);
+                  }}
+                  onFocus={() => setIsDropdownOpen(true)}
                   required
                 />
+
+                {/* Dropdown Menu */}
+                {isDropdownOpen && derivedGames.length > 0 && (
+                  <ul className="absolute z-10 w-full mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                    {derivedGames.map((game) => (
+                      <li
+                        key={game.id}
+                        onClick={() => handleGameSelect(game.name)}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-700 cursor-pointer text-white border-b border-neutral-700 last:border-0 transition-colors"
+                      >
+                        <img 
+                          src={game.artwork_url} 
+                          alt={game.name} 
+                          className="w-10 h-14 object-cover rounded bg-neutral-900" 
+                        />
+                        <span className="font-medium">{game.name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <div>
