@@ -67,7 +67,6 @@ export default function PlatformHardwareLog() {
     }
 
     // Pass the flat data object to the hook
-    // Use the found game's artwork if explicit selection was cleared but name matches
     await addLog({
       gameTitle: selectedGame.name,
       os,
