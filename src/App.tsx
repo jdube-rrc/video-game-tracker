@@ -9,8 +9,8 @@ import Registration from "./components/pages/registration/Registration";
 import PlatformHardwareLog from "./components/pages/PlatformHardwareLog/PlatformHardwareLog";
 import userAvatarFallback from "./assets/user.png";
 import "./App.css";
-import { useVisits } from "./hooks/useVisits/userVisits";
-import { useFavorites } from "./hooks/useFavorites/userFavorites";
+import { useVisits } from "./hooks/useVisits/useVisits";
+import { useFavorites } from "./hooks/useFavorites/useFavorites";
 
 export interface UserProfileData {
   bio: string;
@@ -42,6 +42,7 @@ function App() {
   const handleProfileUpdate = (updatedData: Partial<UserProfileData>) => {
     setUserProfile((prev) => ({ ...prev, ...updatedData }));
   };
+
 
   return (
     <BrowserRouter>
