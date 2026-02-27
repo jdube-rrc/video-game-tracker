@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { useHardwareLogs } from "../../../hooks/usePlatformHardwareLogs/userPlatformHardwareLogs";
+import { useHardwareLogs } from "../../../hooks/usePlatformHardwareLogs/usePlatformHardwareLogs";
 import { videoGames, type VideoGame } from "../../../data/video_games";
 
 /**
