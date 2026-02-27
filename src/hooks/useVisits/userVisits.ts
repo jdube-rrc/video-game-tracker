@@ -1,19 +1,20 @@
-import { useState } from 'react';
+import { useSyncExternalStore } from "react";
+import { visitsService } from "../../services/visitsService";
 
 /**
- * Custom hook to manage the user's visit count.
+ * Presentation hook for shared visits state.
+ * Subscribes to visit updates exposed by the service layer.
  *
- * @returns An object containing the current visit count and a function to increment it.
+ * @returns `visitCount` for display and `incrementVisits` for UI actions.
  */
 export function useVisits() {
-  const [visitCount, setVisitCount] = useState(0);
-
-  const incrementVisits = () => {
-    setVisitCount((prev) => prev + 1);
-  };
+  const visitCount = useSyncExternalStore(
+    visitsService.subscribe,
+    visitsService.getVisitCount
+  );
 
   return {
     visitCount,
-    incrementVisits
+    incrementVisits: visitsService.incrementVisits,
   };
 }

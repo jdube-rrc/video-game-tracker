@@ -8,8 +8,6 @@ import UserProfile from "./components/pages/UserProfile/UserProfile";
 import Registration from "./components/pages/registration/Registration";
 import userAvatarFallback from "./assets/user.png";
 import "./App.css";
-import { useVisits } from "./hooks/useVisits/userVisits";
-import { useFavorites } from "./hooks/useFavorites/userFavorites";
 
 export interface UserProfileData {
   bio: string;
@@ -17,16 +15,12 @@ export interface UserProfileData {
 }
 
 /**
- * The main application component that sets up routing and shared state,
- * including a visits counter, favorite games list, and user profile data.
+ * The main application component that sets up routing and profile-editing state.
+ * Shared visits/favorites state is consumed by pages through the hook-service-repository layers.
  *
  * @returns The App component.
  */
 function App() {
-  const { visitCount, incrementVisits } = useVisits();
-
-  const { favorites, toggleFavorite } = useFavorites();
-
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfileData>({
     bio: "This is a placeholder bio. Click edit to tell the world about your gaming habits!",
@@ -55,38 +49,20 @@ function App() {
         >
           <Route
             path="/"
-            element={<HomePage visits={visitCount} setVisits={incrementVisits} />}
+            element={<HomePage />}
           />
           <Route
             path="/browse"
-            element={
-              <SearchBrowse
-                visits={visitCount}
-                setVisits={incrementVisits}
-                favorites={favorites}
-                onToggleFavorite={toggleFavorite}
-              />
-            }
+            element={<SearchBrowse />}
           />
           <Route
             path="/game/:id"
-            element={
-              <GameDetails
-                visits={visitCount}
-                setVisits={incrementVisits}
-                favorites={favorites}
-                onToggleFavorite={toggleFavorite}
-              />
-            }
+            element={<GameDetails />}
           />
           <Route
             path="/profile"
             element={
               <UserProfile
-                visits={visitCount}
-                setVisits={incrementVisits}
-                favorites={favorites}
-                onToggleFavorite={toggleFavorite}
                 user={userProfile}
                 isEditing={isEditingProfile}
                 onUpdateUser={handleProfileUpdate}
@@ -95,7 +71,7 @@ function App() {
           />
           <Route
             path="/registration"
-            element={<Registration visits={visitCount} setVisits={incrementVisits} />}
+            element={<Registration />}
           />
         </Route>
       </Routes>

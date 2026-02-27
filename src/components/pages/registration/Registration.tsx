@@ -8,11 +8,7 @@ import {
   removeGenre,
   isFormValid,
 } from '../../../services/registrationService';
-
-type RegistrationProps = {
-  visits: number;
-  setVisits: Dispatch<SetStateAction<number>>;
-};
+import { useVisits } from '../../../hooks/useVisits/userVisits';
 
 type RegistrationFormState = {
   displayName: string;
@@ -104,13 +100,11 @@ function RegistrationForm({ formState, setFormState, errors }: RegistrationFormP
  * with a display name, email, tagline, and favorite genres. Also includes
  * a shared visits counter.
  * 
- * @param visits - The current number of visits.
- * @param setVisits - Function to update the number of visits.
- * 
  * @returns The Registration component.
  */
 
-function Registration({ visits, setVisits }: RegistrationProps) {
+function Registration() {
+  const { visitCount, incrementVisits } = useVisits();
   const [formState, setFormState] = useState<RegistrationFormState>({
     displayName: '',
     email: '',
@@ -144,11 +138,11 @@ function Registration({ visits, setVisits }: RegistrationProps) {
       </header>
 
       <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 text-center space-y-2">
-        <p className="text-neutral-400">Shared visits counter: {visits}</p>
+        <p className="text-neutral-400">Shared visits counter: {visitCount}</p>
         <button
           type="button"
           className="px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200"
-          onClick={() => setVisits((current) => current + 1)}
+          onClick={incrementVisits}
         >
           Add visit
         </button>

@@ -1,15 +1,9 @@
-import type { Dispatch, SetStateAction } from "react";
 import { FavoriteGames } from "./FavoriteGames";
-import { type VideoGame } from "../../../data/video_games";
 import { type UserProfileData } from "../../../App";
+import { useVisits } from "../../../hooks/useVisits/userVisits";
+import { useFavorites } from "../../../hooks/useFavorites/userFavorites";
 
 type UserProfileProps = {
-  visits: number;
-  setVisits: Dispatch<SetStateAction<number>>;
-
-  favorites?: VideoGame[];
-  onToggleFavorite?: (game: VideoGame) => void;
-
   user: UserProfileData;
   isEditing: boolean;
   onUpdateUser: (data: Partial<UserProfileData>) => void;
@@ -19,10 +13,6 @@ type UserProfileProps = {
  * Renders the user profile page, including a shared visits counter, avatar, bio,
  * and favorite games section.
  * 
- * @param visits - The current number of visits.
- * @param setVisits - Function to update the number of visits.
- * @param favorites - List of favorite video games.
- * @param onToggleFavorite - Function to toggle a game's favorite status.
  * @param user - The user profile data.
  * @param isEditing - Whether the profile is in editing mode.
  * @param onUpdateUser - Function to update the user profile data.
@@ -31,22 +21,21 @@ type UserProfileProps = {
  */
 
 function UserProfile({
-  visits,
-  setVisits,
-  favorites = [],
-  onToggleFavorite = () => {},
   user,
   isEditing,
   onUpdateUser,
 }: UserProfileProps) {
+  const { visitCount, incrementVisits } = useVisits();
+  const { favorites, toggleFavorite } = useFavorites();
+
   return (
     <section className="space-y-8">
       <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 text-center space-y-2">
-        <p className="text-neutral-400">Shared visits counter: {visits}</p>
+        <p className="text-neutral-400">Shared visits counter: {visitCount}</p>
         <button
           type="button"
           className="px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200"
-          onClick={() => setVisits((current) => current + 1)}
+          onClick={incrementVisits}
         >
           Add visit
         </button>
@@ -111,7 +100,7 @@ function UserProfile({
       <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 min-h-96">
         <FavoriteGames
           favorites={favorites}
-          onToggleFavorite={onToggleFavorite}
+          onToggleFavorite={toggleFavorite}
         />
       </div>
     </section>

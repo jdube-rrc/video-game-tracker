@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 import type { VideoGame } from "../../data/video_games";
+import { favoritesService } from "../../services/favoritesService";
 
 /**
- * Custom hook to manage the user's favorite video games.
+ * Presentation hook for shared favorites state.
+ * Subscribes to favorites updates and exposes UI-focused actions/selectors.
  *
- * @returns An object containing the list of favorite games, a function to toggle a game's favorite status,
- *          and a function to check if a game is a favorite.
+ * @returns `favorites` for rendering, `toggleFavorite` for UI actions, and
+ * `isFavorite` as a convenience selector by game ID.
  */
 export function useFavorites() {
-  const [favorites, setFavorites] = useState<VideoGame[]>([]);
+  const favorites = useSyncExternalStore(
+    favoritesService.subscribe,
+    favoritesService.getFavorites
+  );
 
   /**
    * Toggles a game as favorite or not.
@@ -16,11 +21,7 @@ export function useFavorites() {
    * @param game - The video game object to toggle as favorite.
    */
   const toggleFavorite = (game: VideoGame) => {
-    if (favorites.some((f) => f.id === game.id)) {
-      setFavorites((prev) => prev.filter((f) => f.id !== game.id));
-    } else {
-      setFavorites((prev) => [...prev, game]);
-    }
+    favoritesService.toggleFavorite(game);
   };
 
   /**
@@ -30,7 +31,7 @@ export function useFavorites() {
    * @returns True if the game is a favorite, false otherwise.
    */
   const isFavorite = (gameId: number): boolean => {
-    return favorites.some((f) => f.id === gameId);
+    return favoritesService.isFavorite(gameId);
   };
 
   return {

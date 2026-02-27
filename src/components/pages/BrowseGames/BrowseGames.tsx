@@ -1,27 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import GameCatalog from './GameCatalog';
-import type { VideoGame } from '../../../data/video_games';
-
-type SearchBrowseProps = {
-  visits: number;
-  setVisits: Dispatch<SetStateAction<number>>;
-  favorites: VideoGame[];
-  onToggleFavorite: (game: VideoGame) => void;
-};
+import { useVisits } from '../../../hooks/useVisits/userVisits';
+import { useFavorites } from '../../../hooks/useFavorites/userFavorites';
 
 /**
  * Renders the search and browse games page, including a shared visits counter,
  * search input, and a catalog of games with favorite toggling functionality.
  * 
- * @param visits - The current number of visits.
- * @param setVisits - Function to update the number of visits.
- * @param favorites - List of favorite video games.
- * @param onToggleFavorite - Function to toggle a game's favorite status.
- * 
  * @returns The SearchBrowse component.
  */
-function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: SearchBrowseProps) {
+function SearchBrowse() {
+  const { visitCount, incrementVisits } = useVisits();
+  const { favorites, toggleFavorite } = useFavorites();
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [isVisible, setIsVisible] = useState(false); // Start hidden, fade in on render
@@ -68,11 +58,11 @@ function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: Search
       <h1 className="text-3xl font-bold text-white">Search & Browse Games</h1>
       
       <div className="space-y-2">
-        <p className="text-neutral-400">Shared visits counter: {visits}</p>
+        <p className="text-neutral-400">Shared visits counter: {visitCount}</p>
         <button
           type="button"
           className="px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200"
-          onClick={() => setVisits((current) => current + 1)}
+          onClick={incrementVisits}
         >
           Add visit
         </button>
@@ -106,7 +96,7 @@ function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: Search
       <div 
         className={`transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`} // Fade effect on load and search changes
       >
-        <GameCatalog searchTerm={debouncedSearch} favorites={favorites} onToggleFavorite={onToggleFavorite} />
+        <GameCatalog searchTerm={debouncedSearch} favorites={favorites} onToggleFavorite={toggleFavorite} />
       </div>
     </div>
   );

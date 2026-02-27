@@ -1,27 +1,15 @@
-import type { Dispatch, SetStateAction } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { type VideoGame } from '../../../data/video_games';
 import { getGameById, formatReleaseDate, isGameFavorite } from '../../../services/gameService';
-
-type GameDetailsProps = {
-  visits: number;
-  setVisits: Dispatch<SetStateAction<number>>;
-  favorites?: VideoGame[];
-  onToggleFavorite?: (game: VideoGame) => void;
-};
+import { useFavorites } from '../../../hooks/useFavorites/userFavorites';
 
 /**
  * Renders the game details page for a specific video game, displaying its 
  * artwork, synopsis, ratings, platforms, genres, and favorite toggling functionality.
  * 
- * @param visits - The current number of visits.
- * @param setVisits - Function to update the number of visits.
- * @param favorites - List of favorite video games.
- * @param onToggleFavorite - Function to toggle a game's favorite status.
- * 
  * @returns The GameDetails component.
  */
-function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
+function GameDetails() {
+  const { favorites, toggleFavorite } = useFavorites();
   const { id } = useParams<{ id: string }>();
   const game = getGameById(Number(id));
   const isFavorite = game ? isGameFavorite(game.id, favorites) : false;
@@ -77,28 +65,26 @@ function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
                   className="w-full h-full rounded-lg shadow-2xl border border-neutral-700 object-cover"
                 />
                 {/* Favorite Button */}
-                {onToggleFavorite && (
-                  <button
-                    type="button"
-                    onClick={() => onToggleFavorite(game)}
-                    className={`absolute top-2 right-2 z-20 p-2 rounded-full transition-colors ${
-                      isFavorite
-                        ? 'bg-red-500 text-white'
-                        : 'bg-black/50 text-neutral-300 hover:bg-black/70 hover:text-white'
-                    }`}
-                    aria-label={isFavorite ? `Remove ${game.name} from favorites` : `Add ${game.name} to favorites`}
+                <button
+                  type="button"
+                  onClick={() => toggleFavorite(game)}
+                  className={`absolute top-2 right-2 z-20 p-2 rounded-full transition-colors ${
+                    isFavorite
+                      ? 'bg-red-500 text-white'
+                      : 'bg-black/50 text-neutral-300 hover:bg-black/70 hover:text-white'
+                  }`}
+                  aria-label={isFavorite ? `Remove ${game.name} from favorites` : `Add ${game.name} to favorites`}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill={isFavorite ? 'currentColor' : 'none'}
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    className="w-5 h-5"
                   >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill={isFavorite ? 'currentColor' : 'none'}
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      className="w-5 h-5"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                    </svg>
-                  </button>
-                )}
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                  </svg>
+                </button>
               </div>
 
               {/* Ratings */}
