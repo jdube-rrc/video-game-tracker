@@ -1,5 +1,13 @@
 import { useState } from 'react';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import {
+  getDisplayNameError,
+  getEmailError,
+  getGenreError,
+  addGenre,
+  removeGenre,
+  isFormValid,
+} from '../../../services/registrationService';
 
 type RegistrationProps = {
   visits: number;
@@ -111,39 +119,19 @@ function Registration({ visits, setVisits }: RegistrationProps) {
   const [newGenre, setNewGenre] = useState('');
   const [favoriteGenres, setFavoriteGenres] = useState<string[]>(['Action', 'RPG']);
 
-  const trimmedName = formState.displayName.trim();
-  const trimmedEmail = formState.email.trim();
-  const displayNameError =
-    trimmedName.length === 0
-      ? 'Display name is required.'
-      : trimmedName.length < 2
-        ? 'Display name must be at least 2 characters.'
-        : undefined;
-  const emailError =
-    trimmedEmail.length === 0
-      ? 'Email is required.'
-      : /^\S+@\S+\.\S+$/.test(trimmedEmail)
-        ? undefined
-        : 'Enter a valid email address.';
-
-  const canAddGenre = newGenre.trim().length > 0;
+  const displayNameError = getDisplayNameError(formState.displayName);
+  const emailError = getEmailError(formState.email);
+  const genreError = getGenreError(newGenre, favoriteGenres);
 
   const handleAddGenre = () => {
-    const nextGenre = newGenre.trim();
-    if (!nextGenre) {
-      return;
+    if (!genreError) {
+      setFavoriteGenres((current) => addGenre(current, newGenre));
+      setNewGenre('');
     }
-    setFavoriteGenres((current) => {
-      if (current.some((genre) => genre.toLowerCase() === nextGenre.toLowerCase())) {
-        return current;
-      }
-      return [...current, nextGenre];
-    });
-    setNewGenre('');
   };
 
   const handleRemoveGenre = (genreToRemove: string) => {
-    setFavoriteGenres((current) => current.filter((genre) => genre !== genreToRemove));
+    setFavoriteGenres((current) => removeGenre(current, genreToRemove));
   };
 
   return (
@@ -190,23 +178,28 @@ function Registration({ visits, setVisits }: RegistrationProps) {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
-              <input
-                type="text"
-                value={newGenre}
-                onChange={(event) => setNewGenre(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault();
-                    handleAddGenre();
-                  }
-                }}
-                placeholder="Add genre"
-                className="flex-1 rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-neutral-100 focus:border-neutral-400 focus:outline-none"
-              />
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={newGenre}
+                  onChange={(event) => setNewGenre(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      handleAddGenre();
+                    }
+                  }}
+                  placeholder="Add genre"
+                  className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-neutral-100 focus:border-neutral-400 focus:outline-none"
+                />
+                {newGenre.trim().length > 0 && genreError ? (
+                  <p className="text-xs text-rose-300 mt-1">{genreError}</p>
+                ) : null}
+              </div>
               <button
                 type="button"
                 onClick={handleAddGenre}
-                disabled={!canAddGenre}
+                disabled={!!genreError}
                 className="px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200 disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-300"
               >
                 Add genre
@@ -244,7 +237,7 @@ function Registration({ visits, setVisits }: RegistrationProps) {
             <div>
               <p className="text-xs uppercase tracking-wide text-neutral-500">Player</p>
               <p className="text-lg font-semibold text-white">
-                {trimmedName.length > 0 ? trimmedName : 'New Player'}
+                {formState.displayName.trim().length > 0 ? formState.displayName.trim() : 'New Player'}
               </p>
               <p className="text-sm text-neutral-400">
                 {formState.tagline.trim().length > 0
@@ -256,7 +249,7 @@ function Registration({ visits, setVisits }: RegistrationProps) {
             <div className="space-y-1">
               <p className="text-xs uppercase tracking-wide text-neutral-500">Contact</p>
               <p className="text-sm text-neutral-200">
-                {trimmedEmail.length > 0 ? trimmedEmail : 'No email provided'}
+                {formState.email.trim().length > 0 ? formState.email.trim() : 'No email provided'}
               </p>
             </div>
 
@@ -281,7 +274,7 @@ function Registration({ visits, setVisits }: RegistrationProps) {
 
           <button
             type="button"
-            disabled={Boolean(displayNameError || emailError)}
+            disabled={!isFormValid(formState.displayName, formState.email)}
             className="w-full px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200 disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-300"
           >
             Create account

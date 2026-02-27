@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import GameCatalog from './GameCatalog';
 import type { VideoGame } from '../../../data/video_games';
@@ -23,7 +23,45 @@ type SearchBrowseProps = {
  */
 function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: SearchBrowseProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const normalizedSearch: string = searchTerm.trim();
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [isVisible, setIsVisible] = useState(false); // Start hidden, fade in on render
+  const hasUserTyped = useRef(false); // Tracks if user has typed to skip initial debounce
+
+  // Fade in on initial render
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 150);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Debounce the search term - waits 300ms after user stops typing
+  // Then triggers fade-out, updates search, and fades back in
+  useEffect(() => {
+    // Skip until user has typed
+    if (!hasUserTyped.current) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      const trimmed = searchTerm.trim();
+      if (trimmed.length >= 2 || trimmed.length === 0) {
+        // Start fade-out
+        setIsVisible(false);
+        // After fade-out completes (150ms), update search results
+        setTimeout(() => {
+          setDebouncedSearch(trimmed);
+          // Small delay then fade back in
+          setTimeout(() => setIsVisible(true), 50);
+        }, 150);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    hasUserTyped.current = true;
+    setSearchTerm(event.target.value);
+  };
 
   return (
     <div className="space-y-6 text-center">
@@ -49,7 +87,7 @@ function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: Search
           <input
             type="search"
             value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onChange={handleSearchChange}
             placeholder="Search by game name"
             className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-white placeholder:text-neutral-500 focus:border-neutral-400 focus:outline-none"
           />
@@ -65,7 +103,11 @@ function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: Search
         </div>
       </form>
 
-      <GameCatalog searchTerm={normalizedSearch} favorites={favorites} onToggleFavorite={onToggleFavorite} />
+      <div 
+        className={`transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`} // Fade effect on load and search changes
+      >
+        <GameCatalog searchTerm={debouncedSearch} favorites={favorites} onToggleFavorite={onToggleFavorite} />
+      </div>
     </div>
   );
 }
