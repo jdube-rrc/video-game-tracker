@@ -73,7 +73,7 @@ export default function PlatformHardwareLog() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchTerm);
-    }, 2000); // 2 second debounce
+    }, 1000); // 1 second debounce
 
     return () => clearTimeout(timer);
   }, [searchTerm]);
