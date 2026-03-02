@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useHardwareLogs } from "../../../hooks/usePlatformHardwareLogs/usePlatformHardwareLogs";
-import { videoGames, type VideoGame } from "../../../data/video_games";
+import { getAllGames } from "../../../services/gameService";
+import { type VideoGame } from "../../../data/video_games";
 
 
 
@@ -34,7 +35,7 @@ export default function PlatformHardwareLog() {
    */
   const derivedGames = useMemo(() => {
     if (!gameTitle) return [];
-    return videoGames
+    return getAllGames()
       .filter((g) => g.name.toLowerCase().includes(gameTitle.toLowerCase()))
       .slice(0, 5); // Limit to top 5 results
   }, [gameTitle]);
@@ -110,7 +111,7 @@ export default function PlatformHardwareLog() {
     if (!gameTitle.trim()) return;
 
     // Validate that the game exists in the database
-    const selectedGame = videoGames.find(
+    const selectedGame = getAllGames().find(
       (g) => g.name.toLowerCase() === gameTitle.trim().toLowerCase(),
     );
 
@@ -259,7 +260,7 @@ export default function PlatformHardwareLog() {
                 </label>
                 <textarea
                   placeholder="Describe performance details, setting tweaks, or issues..."
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors min-h-[120px]"
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors min-h-30"
                   value={reviewText}
                   onChange={(e) => setReviewText(e.target.value)}
                   required
@@ -330,7 +331,7 @@ export default function PlatformHardwareLog() {
                 >
                   {/* Artwork Column */}
                   {log.artwork_url && (
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <img
                         src={log.artwork_url}
                         alt={log.gameTitle}
@@ -340,7 +341,7 @@ export default function PlatformHardwareLog() {
                   )}
 
                   {/* Content Column */}
-                  <div className="flex-grow">
+                  <div className="grow">
                     <div className="flex justify-between items-start mb-3">
                       <h4 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
                         {log.gameTitle}
