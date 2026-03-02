@@ -27,7 +27,7 @@ function Nav({ isEditing, onToggleEdit }: NavProps) {
         </Link>
         <Link
           to="/hardware-logs"
-          className="hover:text-white transition-colors"
+          className="text-neutral-400 hover:text-neutral-100"
         >
           Hardware Logs
         </Link>

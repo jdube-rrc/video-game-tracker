@@ -2,9 +2,12 @@ import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useHardwareLogs } from "../../../hooks/usePlatformHardwareLogs/usePlatformHardwareLogs";
 import { videoGames, type VideoGame } from "../../../data/video_games";
 
+
+
 /**
  * Component for displaying and submitting hardware compatibility logs.
- * Uses the `useHardwareLogs` hook for data management.
+ * Users can view logs from other users or submit their own performance reports.
+ * Includes search functionality to filter logs by keywords.
  */
 export default function PlatformHardwareLog() {
   // Destructure everything we need from our custom hook
@@ -18,11 +21,17 @@ export default function PlatformHardwareLog() {
   const [reviewText, setReviewText] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
   // Search Data State
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Filter games based on input
+  /**
+   * Filters the available games based on the user's input in the game title field.
+   * Limits results to the top 5 matches.
+   */
   const derivedGames = useMemo(() => {
     if (!gameTitle) return [];
     return videoGames
@@ -30,7 +39,20 @@ export default function PlatformHardwareLog() {
       .slice(0, 5); // Limit to top 5 results
   }, [gameTitle]);
 
-  // Closes dropdown if user clicks outside of it
+  /**
+   * Handles selection of a game from the dropdown menu.
+   * Populates the game title field and closes the dropdown.
+   * @param {VideoGame} game - The selected game object
+   */
+  const handleGameSelect = (game: VideoGame) => {
+    setGameTitle(game.name);
+    setIsDropdownOpen(false);
+    setFormError(null);
+  };
+
+  /**
+   * Effect to handle clicking outside the dropdown menu to close it.
+   */
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -44,19 +66,50 @@ export default function PlatformHardwareLog() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleGameSelect = (game: VideoGame) => {
-    setGameTitle(game.name);
-    setIsDropdownOpen(false);
-    setFormError(null);
-  };
+  /**
+   * Effect to debounce the search term input.
+   * Updates `debouncedSearch` after a 2-second delay from the last input change.
+   */
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 300); // 300ms debounce
 
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  /**
+   * Filters the logs based on the debounced search term.
+   * Splits the search term into keywords and checks if all keywords
+   * exist in the log's searchable fields (title, OS, specs, review).
+   */
+  const filteredLogs = useMemo(() => {
+    if (!debouncedSearch.trim()) return logs;
+
+    const keywords = debouncedSearch
+      .toLowerCase()
+      .split(/[ ,]+/)
+      .filter(Boolean);
+
+    return logs.filter((log) => {
+      const logString =
+        `${log.gameTitle} ${log.os} ${log.hardwareSpecs} ${log.reviewText}`.toLowerCase();
+      return keywords.every((keyword) => logString.includes(keyword));
+    });
+  }, [debouncedSearch, logs]);
+
+  /**
+   * Handles the submission of a new hardware log.
+   * Validates the game title and calls the `addLog` function.
+   * @param {React.FormEvent} e - The form submission event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
 
     if (!gameTitle.trim()) return;
 
-    // Validate that the game exists in our database
+    // Validate that the game exists in the database
     const selectedGame = videoGames.find(
       (g) => g.name.toLowerCase() === gameTitle.trim().toLowerCase(),
     );
@@ -84,7 +137,11 @@ export default function PlatformHardwareLog() {
     setReviewText("");
   };
 
-  // If user types manually, clear the artwork unless it matches
+  /**
+   * Handles changes to the game title input field.
+   * Opens the dropdown and updates the state.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event
+   */
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGameTitle(e.target.value);
     setIsDropdownOpen(true);
@@ -216,7 +273,7 @@ export default function PlatformHardwareLog() {
                 Submit Log
               </button>
             </form>
-            
+
             {/* Display Business Logic Errors */}
             {(error || formError) && (
               <div className="bg-red-900/50 border border-red-800 text-red-200 p-4 rounded-lg mt-4">
@@ -228,17 +285,45 @@ export default function PlatformHardwareLog() {
 
         {/* Right Side: The Logs List */}
         <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-xl font-bold text-white mb-4">Recent Logs</h3>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <h3 className="text-xl font-bold text-white">Recent Logs</h3>
 
-          {logs.length === 0 ? (
+            {/* Search Box */}
+            <div className="relative flex items-center gap-2 max-w-md w-full sm:w-auto">
+              <input
+                type="text"
+                placeholder="Search keywords..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 pl-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors"
+              />
+
+              <div className="group relative">
+                <div className="flex items-center justify-center w-6 h-6 rounded-full border border-neutral-500 text-neutral-400 text-xs font-bold cursor-help hover:text-white hover:border-white">
+                  i
+                </div>
+                {/* Tooltip */}
+                <div className="absolute right-0 top-8 w-64 p-3 bg-neutral-800 border border-neutral-700 rounded-lg shadow-xl text-xs text-neutral-300 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
+                  <p>Filter logs by keywords separated by spaces or commas.</p>
+                  <p className="mt-1 text-neutral-500 italic">
+                    Example: "Arch Linux Nvidia" or "Windows 10, Ryzen, Radeon"
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {filteredLogs.length === 0 ? (
             <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-10 text-center">
               <p className="text-neutral-500">
-                No logs submitted yet. Be the first to add one!
+                {logs.length === 0
+                  ? "No logs submitted yet. Be the first to add one!"
+                  : "No logs match your search criteria."}
               </p>
             </div>
           ) : (
             <div className="grid gap-4">
-              {logs.map((log) => (
+              {filteredLogs.map((log) => (
                 <div
                   key={log.id}
                   className="bg-neutral-900 p-5 rounded-xl border border-neutral-800 hover:border-neutral-700 transition-colors group flex gap-5"
