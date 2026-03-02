@@ -24,7 +24,7 @@ export interface UserProfileData {
  * @returns The App component.
  */
 function App() {
-  const { visitCount, incrementVisits } = useVisits();
+  const { visitCount, setVisitCount } = useVisits();
 
   const { favorites, toggleFavorite } = useFavorites();
 
@@ -58,7 +58,7 @@ function App() {
           <Route
             path="/"
             element={
-              <HomePage visits={visitCount} setVisits={incrementVisits} />
+              <HomePage visits={visitCount} setVisits={setVisitCount} />
             }
           />
           <Route
@@ -66,7 +66,7 @@ function App() {
             element={
               <SearchBrowse
                 visits={visitCount}
-                setVisits={incrementVisits}
+                setVisits={setVisitCount}
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
               />
@@ -77,7 +77,7 @@ function App() {
             element={
               <GameDetails
                 visits={visitCount}
-                setVisits={incrementVisits}
+                setVisits={setVisitCount}
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
               />
@@ -88,7 +88,7 @@ function App() {
             element={
               <UserProfile
                 visits={visitCount}
-                setVisits={incrementVisits}
+                setVisits={setVisitCount}
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
                 user={userProfile}
@@ -100,7 +100,7 @@ function App() {
           <Route
             path="/registration"
             element={
-              <Registration visits={visitCount} setVisits={incrementVisits} />
+              <Registration visits={visitCount} setVisits={setVisitCount} />
             }
           />
           <Route path="/hardware-logs" element={<PlatformHardwareLog />} />
