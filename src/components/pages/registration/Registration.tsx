@@ -8,6 +8,7 @@ import {
   removeGenre,
   isFormValid,
 } from '../../../services/registrationService';
+import { useUserProfiles } from '../../../hooks/useUserProfiles/useUserProfiles';
 
 type RegistrationProps = {
   visits: number;
@@ -104,6 +105,19 @@ function RegistrationForm({ formState, setFormState, errors }: RegistrationFormP
  * with a display name, email, tagline, and favorite genres. Also includes
  * a shared visits counter.
  * 
+ * ARCHITECTURE: This component demonstrates the full stack:
+ * 1. It invokes the `useUserProfiles` custom hook (which manages state)
+ * 2. The hook calls `profileService.create()` (which handles business logic)
+ * 3. The service calls `userProfileRepository.create()` (which accesses/persists data)
+ * 4. The repository uses test data from `user_profiles.ts` (which will be a database later)
+ * 
+ * Concerns are properly separated:
+ * - COMPONENT: handles UI rendering and user input
+ * - HOOK: manages loading state and data synchronization
+ * - SERVICE: applies business rules (validation, transformations)
+ * - REPOSITORY: abstracts data access (test data now, API later)
+ * - DATA: defines the shape of user profiles
+ * 
  * @param visits - The current number of visits.
  * @param setVisits - Function to update the number of visits.
  * 
@@ -111,6 +125,9 @@ function RegistrationForm({ formState, setFormState, errors }: RegistrationFormP
  */
 
 function Registration({ visits, setVisits }: RegistrationProps) {
+  // Hook provides createProfile method and loading state for the architecture chain
+  const { createProfile } = useUserProfiles();
+
   const [formState, setFormState] = useState<RegistrationFormState>({
     displayName: '',
     email: '',
@@ -118,6 +135,7 @@ function Registration({ visits, setVisits }: RegistrationProps) {
   });
   const [newGenre, setNewGenre] = useState('');
   const [favoriteGenres, setFavoriteGenres] = useState<string[]>(['Action', 'RPG']);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const displayNameError = getDisplayNameError(formState.displayName);
   const emailError = getEmailError(formState.email);
@@ -132,6 +150,33 @@ function Registration({ visits, setVisits }: RegistrationProps) {
 
   const handleRemoveGenre = (genreToRemove: string) => {
     setFavoriteGenres((current) => removeGenre(current, genreToRemove));
+  };
+
+  /**
+   * Handles account creation by calling the useUserProfiles hook's createProfile method.
+   * This kicks off the chain: hook → service → repository → storage
+   */
+  const handleCreateAccount = async () => {
+    setIsSubmitting(true);
+    try {
+      await createProfile({
+        username: formState.displayName.trim(),
+        email: formState.email.trim(),
+        tagline: formState.tagline.trim(),
+        favoriteGenres,
+        createdAt: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
+      });
+      // Success! In a real app, you'd navigate or show a success message
+      alert('Profile created successfully!');
+      // Reset the form
+      setFormState({ displayName: '', email: '', tagline: '' });
+      setFavoriteGenres(['Action', 'RPG']);
+    } catch (error) {
+      console.error('Error creating profile:', error);
+      alert('Failed to create profile. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -274,10 +319,11 @@ function Registration({ visits, setVisits }: RegistrationProps) {
 
           <button
             type="button"
-            disabled={!isFormValid(formState.displayName, formState.email)}
+            onClick={handleCreateAccount}
+            disabled={!isFormValid(formState.displayName, formState.email) || isSubmitting}
             className="w-full px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200 disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-300"
           >
-            Create account
+            {isSubmitting ? 'Creating account...' : 'Create account'}
           </button>
         </div>
       </div>
