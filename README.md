@@ -72,3 +72,19 @@ Rayn
 
 ### Create project documentation
 Jared
+
+## Sprint 3
+### Favorite Hook-Service-Repo Refactor
+Jared
+
+### UserProfile Hook-Service-Repo Refactor
+Muse
+
+### Hardware Log Hook-Service-Repo Implementation
+Rayn
+
+### Custom Hooks
+All team members
+
+### Service Layer Functionality
+All team members
