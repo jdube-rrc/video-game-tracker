@@ -7,7 +7,7 @@ interface NavProps {
 
 /**
  * Renders the navigation bar with links and an optional edit button.
- * 
+ *
  * @param isEditing - Whether the profile is in editing mode.
  * @param onToggleEdit - Function to toggle editing mode.
  * @returns The navigation bar component.
@@ -24,6 +24,12 @@ function Nav({ isEditing, onToggleEdit }: NavProps) {
         </Link>
         <Link to="/browse" className="text-neutral-400 hover:text-neutral-100">
           Browse Games
+        </Link>
+        <Link
+          to="/hardware-logs"
+          className="text-neutral-400 hover:text-neutral-100"
+        >
+          Hardware Logs
         </Link>
         <Link to="/profile" className="text-neutral-400 hover:text-neutral-100">
           Profile

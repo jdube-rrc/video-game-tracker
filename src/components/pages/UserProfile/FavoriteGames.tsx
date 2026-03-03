@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { videoGames, type VideoGame } from '../../../data/video_games';
+import { type VideoGame } from '../../../data/video_games';
+import { getGameById, getAvailableGames } from '../../../services/gameService';
 import GameCard from '../../common/game-card/GameCard';
 
 interface FavoriteGamesProps {
@@ -21,7 +22,7 @@ export function FavoriteGames({ favorites, onToggleFavorite }: FavoriteGamesProp
   const [selectedGameId, setSelectedGameId] = useState<string>("");
 
   const handleAddGame = () => {
-    const gameToAdd = videoGames.find(g => g.id.toString() === selectedGameId);
+    const gameToAdd = getGameById(Number(selectedGameId));
     if (gameToAdd) {
       onToggleFavorite(gameToAdd);
       setSelectedGameId("");
@@ -29,7 +30,7 @@ export function FavoriteGames({ favorites, onToggleFavorite }: FavoriteGamesProp
   };
 
   // Filters out games in the drop down that are already in favorites
-  const availableGames = videoGames.filter(g => !favorites.some(f => f.id === g.id));
+  const availableGames = getAvailableGames(favorites);
 
   return (
     <div className="h-full">

@@ -1,5 +1,14 @@
 import { useState } from 'react';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import {
+  getDisplayNameError,
+  getEmailError,
+  getGenreError,
+  addGenre,
+  removeGenre,
+  isFormValid,
+} from '../../../services/registrationService';
+import { useUserProfiles } from '../../../hooks/useUserProfiles/useUserProfiles';
 
 type RegistrationProps = {
   visits: number;
@@ -96,6 +105,19 @@ function RegistrationForm({ formState, setFormState, errors }: RegistrationFormP
  * with a display name, email, tagline, and favorite genres. Also includes
  * a shared visits counter.
  * 
+ * ARCHITECTURE: This component demonstrates the full stack:
+ * 1. It invokes the `useUserProfiles` custom hook (which manages state)
+ * 2. The hook calls `profileService.create()` (which handles business logic)
+ * 3. The service calls `userProfileRepository.create()` (which accesses/persists data)
+ * 4. The repository uses test data from `user_profiles.ts` (which will be a database later)
+ * 
+ * Concerns are properly separated:
+ * - COMPONENT: handles UI rendering and user input
+ * - HOOK: manages loading state and data synchronization
+ * - SERVICE: applies business rules (validation, transformations)
+ * - REPOSITORY: abstracts data access (test data now, API later)
+ * - DATA: defines the shape of user profiles
+ * 
  * @param visits - The current number of visits.
  * @param setVisits - Function to update the number of visits.
  * 
@@ -103,6 +125,9 @@ function RegistrationForm({ formState, setFormState, errors }: RegistrationFormP
  */
 
 function Registration({ visits, setVisits }: RegistrationProps) {
+  // Hook provides createProfile method and loading state for the architecture chain
+  const { createProfile } = useUserProfiles();
+
   const [formState, setFormState] = useState<RegistrationFormState>({
     displayName: '',
     email: '',
@@ -110,40 +135,48 @@ function Registration({ visits, setVisits }: RegistrationProps) {
   });
   const [newGenre, setNewGenre] = useState('');
   const [favoriteGenres, setFavoriteGenres] = useState<string[]>(['Action', 'RPG']);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const trimmedName = formState.displayName.trim();
-  const trimmedEmail = formState.email.trim();
-  const displayNameError =
-    trimmedName.length === 0
-      ? 'Display name is required.'
-      : trimmedName.length < 2
-        ? 'Display name must be at least 2 characters.'
-        : undefined;
-  const emailError =
-    trimmedEmail.length === 0
-      ? 'Email is required.'
-      : /^\S+@\S+\.\S+$/.test(trimmedEmail)
-        ? undefined
-        : 'Enter a valid email address.';
-
-  const canAddGenre = newGenre.trim().length > 0;
+  const displayNameError = getDisplayNameError(formState.displayName);
+  const emailError = getEmailError(formState.email);
+  const genreError = getGenreError(newGenre, favoriteGenres);
 
   const handleAddGenre = () => {
-    const nextGenre = newGenre.trim();
-    if (!nextGenre) {
-      return;
+    if (!genreError) {
+      setFavoriteGenres((current) => addGenre(current, newGenre));
+      setNewGenre('');
     }
-    setFavoriteGenres((current) => {
-      if (current.some((genre) => genre.toLowerCase() === nextGenre.toLowerCase())) {
-        return current;
-      }
-      return [...current, nextGenre];
-    });
-    setNewGenre('');
   };
 
   const handleRemoveGenre = (genreToRemove: string) => {
-    setFavoriteGenres((current) => current.filter((genre) => genre !== genreToRemove));
+    setFavoriteGenres((current) => removeGenre(current, genreToRemove));
+  };
+
+  /**
+   * Handles account creation by calling the useUserProfiles hook's createProfile method.
+   * This kicks off the chain: hook → service → repository → storage
+   */
+  const handleCreateAccount = async () => {
+    setIsSubmitting(true);
+    try {
+      await createProfile({
+        username: formState.displayName.trim(),
+        email: formState.email.trim(),
+        tagline: formState.tagline.trim(),
+        favoriteGenres,
+        createdAt: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
+      });
+      // Success! In a real app, you'd navigate or show a success message
+      alert('Profile created successfully!');
+      // Reset the form
+      setFormState({ displayName: '', email: '', tagline: '' });
+      setFavoriteGenres(['Action', 'RPG']);
+    } catch (error) {
+      console.error('Error creating profile:', error);
+      alert('Failed to create profile. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -190,23 +223,28 @@ function Registration({ visits, setVisits }: RegistrationProps) {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
-              <input
-                type="text"
-                value={newGenre}
-                onChange={(event) => setNewGenre(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault();
-                    handleAddGenre();
-                  }
-                }}
-                placeholder="Add genre"
-                className="flex-1 rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-neutral-100 focus:border-neutral-400 focus:outline-none"
-              />
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={newGenre}
+                  onChange={(event) => setNewGenre(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      handleAddGenre();
+                    }
+                  }}
+                  placeholder="Add genre"
+                  className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-neutral-100 focus:border-neutral-400 focus:outline-none"
+                />
+                {newGenre.trim().length > 0 && genreError ? (
+                  <p className="text-xs text-rose-300 mt-1">{genreError}</p>
+                ) : null}
+              </div>
               <button
                 type="button"
                 onClick={handleAddGenre}
-                disabled={!canAddGenre}
+                disabled={!!genreError}
                 className="px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200 disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-300"
               >
                 Add genre
@@ -244,7 +282,7 @@ function Registration({ visits, setVisits }: RegistrationProps) {
             <div>
               <p className="text-xs uppercase tracking-wide text-neutral-500">Player</p>
               <p className="text-lg font-semibold text-white">
-                {trimmedName.length > 0 ? trimmedName : 'New Player'}
+                {formState.displayName.trim().length > 0 ? formState.displayName.trim() : 'New Player'}
               </p>
               <p className="text-sm text-neutral-400">
                 {formState.tagline.trim().length > 0
@@ -256,7 +294,7 @@ function Registration({ visits, setVisits }: RegistrationProps) {
             <div className="space-y-1">
               <p className="text-xs uppercase tracking-wide text-neutral-500">Contact</p>
               <p className="text-sm text-neutral-200">
-                {trimmedEmail.length > 0 ? trimmedEmail : 'No email provided'}
+                {formState.email.trim().length > 0 ? formState.email.trim() : 'No email provided'}
               </p>
             </div>
 
@@ -281,10 +319,11 @@ function Registration({ visits, setVisits }: RegistrationProps) {
 
           <button
             type="button"
-            disabled={Boolean(displayNameError || emailError)}
+            onClick={handleCreateAccount}
+            disabled={!isFormValid(formState.displayName, formState.email) || isSubmitting}
             className="w-full px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200 disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-300"
           >
-            Create account
+            {isSubmitting ? 'Creating account...' : 'Create account'}
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { videoGames, type VideoGame } from '../../../data/video_games';
+import { type VideoGame } from '../../../data/video_games';
+import { searchGames, getRandomSample, isGameFavorite } from '../../../services/gameService';
 import GameCard from '../../common/game-card/GameCard';
 
 type GameCatalogProps = {
@@ -18,16 +19,12 @@ type GameCatalogProps = {
  * @returns The GameCatalog component.
  */
 export default function GameCatalog({ searchTerm = '', favorites = [], onToggleFavorite }: GameCatalogProps) {
-    const normalizedTerm: string = searchTerm.toLowerCase();
-
-    // useMemo remembers the shuffled games to avoid reshuffling on every render
+    // useMemo remembers the shuffled games to avoid reshuffling on every render,
+    // this is to avoid expensive computations on each key stroke in the search input
     const displayedGames: VideoGame[] = useMemo(() => {
-        const filtered: VideoGame[] = normalizedTerm
-            ? videoGames.filter((game) => game.name.toLowerCase().includes(normalizedTerm))
-            : videoGames;
-        const shuffled: VideoGame[] = [...filtered].sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, 20);
-    }, [normalizedTerm]); // will only recompute if normalizedTerm changes
+        const filtered = searchGames(searchTerm);
+        return getRandomSample(filtered, 20);
+    }, [searchTerm]); // will only recompute if searchTerm changes
 
     if (searchTerm === "Mike") {
         return (
@@ -51,7 +48,7 @@ export default function GameCatalog({ searchTerm = '', favorites = [], onToggleF
                 <GameCard 
                     key={game.id} 
                     game={game} 
-                    isFavorite={favorites.some(f => f.id === game.id)}
+                    isFavorite={isGameFavorite(game.id, favorites)}
                     onToggleFavorite={onToggleFavorite}
                 />
             ))}

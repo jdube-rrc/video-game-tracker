@@ -1,7 +1,9 @@
+import { useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { FavoriteGames } from "./FavoriteGames";
 import { type VideoGame } from "../../../data/video_games";
 import { type UserProfileData } from "../../../App";
+import { getAvatarError, readFileAsDataUrl, getBioError, MAX_BIO_LENGTH } from "../../../services/profileService";
 
 type UserProfileProps = {
   visits: number;
@@ -39,6 +41,29 @@ function UserProfile({
   isEditing,
   onUpdateUser,
 }: UserProfileProps) {
+  const [avatarError, setAvatarError] = useState<string | null>(null);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const error = getAvatarError(file);
+    if (error) {
+      setAvatarError(error);
+      return;
+    }
+
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      onUpdateUser({ avatarUrl: dataUrl });
+      setAvatarError(null);
+    } catch {
+      setAvatarError('Failed to process image.');
+    }
+  };
+
+  const bioError = getBioError(user.bio);
+
   return (
     <section className="space-y-8">
       <div className="bg-neutral-900 rounded-lg p-6 border border-neutral-800 text-center space-y-2">
@@ -73,18 +98,12 @@ function UserProfile({
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        onUpdateUser({ avatarUrl: reader.result as string });
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
+                  onChange={handleAvatarChange}
                   className="w-full bg-neutral-950 border border-neutral-700 rounded p-2 text-sm text-neutral-200 focus:border-neutral-500 outline-none file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-neutral-800 file:text-neutral-200 hover:file:bg-neutral-700 transition"
                 />
+                {avatarError && (
+                  <p className="text-xs text-rose-400 mt-1">{avatarError}</p>
+                )}
               </div>
             )}
           </div>
@@ -94,12 +113,27 @@ function UserProfile({
           <h3 className="text-xl font-bold text-white mb-4">About Me</h3>
 
           {isEditing ? (
-            <textarea
-              value={user.bio}
-              onChange={(e) => onUpdateUser({ bio: e.target.value })}
-              className="w-full h-48 bg-neutral-950 border border-neutral-700 rounded p-4 text-neutral-200 focus:border-neutral-500 outline-none resize-none"
-              placeholder="Write something about yourself..."
-            />
+            <div className="space-y-2">
+              <textarea
+                value={user.bio}
+                onChange={(e) => onUpdateUser({ bio: e.target.value })}
+                className={`w-full h-48 bg-neutral-950 border rounded p-4 text-neutral-200 focus:border-neutral-500 outline-none resize-none ${
+                  bioError ? 'border-rose-500' : 'border-neutral-700'
+                }`}
+                placeholder="Write something about yourself..."
+                maxLength={MAX_BIO_LENGTH + 50}
+              />
+              <div className="flex justify-between text-xs">
+                {bioError ? (
+                  <span className="text-rose-400">{bioError}</span>
+                ) : (
+                  <span className="text-neutral-500">Tell others about your gaming interests</span>
+                )}
+                <span className={user.bio.length > MAX_BIO_LENGTH ? 'text-rose-400' : 'text-neutral-500'}>
+                  {user.bio.length}/{MAX_BIO_LENGTH}
+                </span>
+              </div>
+            </div>
           ) : (
             <p className="text-neutral-400 leading-relaxed whitespace-pre-wrap">
               {user.bio}
