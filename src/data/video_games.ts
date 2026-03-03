@@ -41,6 +41,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing",
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/AKXiKBnzpBQ"
   },
   {
     id: 30492,
@@ -62,6 +63,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/ejgW-upPMgk"
   },
   {
     id: 339266,
@@ -82,6 +84,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/tdsRPs6rX4w"
   },
   {
     id: 371776,
@@ -104,6 +107,7 @@ export const videoGames: VideoGame[] = [
       "Extraction",
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/U0jK145mxec"
   },
   {
     id: 376989,
@@ -129,6 +133,7 @@ export const videoGames: VideoGame[] = [
       "Arcade",
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/4EnsDg6DCTE"
   },
   {
     id: 85727,
@@ -153,6 +158,7 @@ export const videoGames: VideoGame[] = [
       "Shooter",
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/65Yrv8Q2bco"
   },
   {
     id: 63844,
@@ -178,6 +184,7 @@ export const videoGames: VideoGame[] = [
       "Turn-based",
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/1T22wNvoNiU"
   },
   {
     id: 371149,
@@ -203,6 +210,7 @@ export const videoGames: VideoGame[] = [
       "Adventure",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/XHrskkHf958"
   },
   {
     id: 330684,
@@ -225,6 +233,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/iNfTdFMz6E"
   },
   {
     id: 220875,
@@ -247,6 +256,7 @@ export const videoGames: VideoGame[] = [
       "Action",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/SSVYVgm4tH4"
   },
   {
     id: 94850,
@@ -290,7 +300,8 @@ export const videoGames: VideoGame[] = [
     publisher: "Nintendo",
     initial_release_date: "11-17-2002",
     platforms: [
-      "Nintendo GameCube"
+      "Nintendo GameCube",
+      "Nintendo Switch"
     ],
     genre: [
       "Shooter",
@@ -299,6 +310,7 @@ export const videoGames: VideoGame[] = [
       "Metroidvania",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/e9OQOJC1QII"
   },
   {
     id: 120563,
@@ -321,6 +333,7 @@ export const videoGames: VideoGame[] = [
       "Shooter"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/hXUono66wxI"
   },
   {
     id: 367989,
@@ -346,6 +359,7 @@ export const videoGames: VideoGame[] = [
       "Adventure",
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/H50wW4eAFKo"
   },
   {
     id: 138930,
@@ -367,6 +381,7 @@ export const videoGames: VideoGame[] = [
       "Survival",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/21s45Yel5VM"
   },
   {
     id: 363578,
@@ -387,6 +402,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/utVE4aUKYuY"
   },
   {
     id: 79850,
@@ -414,6 +430,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/F809l4SQi1o"
   },
   {
     id: 264844,
@@ -435,6 +452,7 @@ export const videoGames: VideoGame[] = [
       "Hack and slash"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/wJxNhJ8fjFk"
   },
   {
     id: 111651,
@@ -462,6 +480,7 @@ export const videoGames: VideoGame[] = [
       "Hack and slash",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/Bz8l935Bv0Y"
   },
   {
     id: 274434,
@@ -482,6 +501,7 @@ export const videoGames: VideoGame[] = [
       "Adventure",
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/5kcdRBHM7kM"
   },
   {
     id: 1020,
@@ -509,6 +529,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/hvoD7ehZPcM"
   },
   {
     id: 25076,
@@ -534,6 +555,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/HVRzx17WHVk"
   },
   {
     id: 121,
@@ -564,6 +586,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/MmB9b5njVbA"
   },
   {
     id: 11208,
@@ -587,6 +610,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/rClXqZD2Xrs"
   },
   {
     id: 1009,
@@ -609,6 +633,7 @@ export const videoGames: VideoGame[] = [
       "Survival"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/OQpdSVF_k_w"
   },
   {
     id: 2155,
@@ -631,6 +656,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/o1780AqAa20"
   },
   {
     id: 76882,
@@ -653,6 +679,7 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/rXMX4YJ7Lks"
   },
   {
     id: 7346,
@@ -675,6 +702,7 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/zw47_q9wbBE"
   },
   {
     id: 1942,
@@ -702,6 +730,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/6umhTJQltak"
   },
   {
     id: 1877,
@@ -726,6 +755,7 @@ export const videoGames: VideoGame[] = [
       "Shooter"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/nLhWWoAaZ0Q"
   },
   {
     id: 9498,
@@ -746,6 +776,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/fDELdR97OkU"
   },
   {
     id: 7334,
@@ -768,6 +799,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/wzx96gYA8ek"
   },
   {
     id: 26192,
@@ -789,6 +821,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/eOiUtRF8k28"
   },
   {
     id: 1905,
@@ -817,6 +850,7 @@ export const videoGames: VideoGame[] = [
       "Battle Royale"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/NcQnHvvnehY"
   },
   {
     id: 11198,
@@ -842,6 +876,7 @@ export const videoGames: VideoGame[] = [
       "Battle Royale"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/innmNewjkuk"
   },
   {
     id: 115,
@@ -863,6 +898,7 @@ export const videoGames: VideoGame[] = [
       "Strategy"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/ZHhqwBwmRkI"
   },
   {
     id: 8173,
@@ -885,6 +921,7 @@ export const videoGames: VideoGame[] = [
       "Tactical"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/AnGdzz-XWcE"
   },
   {
     id: 126459,
@@ -909,6 +946,7 @@ export const videoGames: VideoGame[] = [
       "Shooter"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/LGgqyer-qr4"
   },
   {
     id: 1372,
@@ -929,6 +967,7 @@ export const videoGames: VideoGame[] = [
       "Tactical"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/c80dVYcL69E"
   },
   {
     id: 113,
@@ -951,6 +990,7 @@ export const videoGames: VideoGame[] = [
       "Strategy"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/SmnqsdeHFT0"
   },
   {
     id: 2963,
@@ -975,6 +1015,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/hdWkpbPTpmE"
   },
   {
     id: 17000,
@@ -997,6 +1038,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/bbFh-Hbd81o"
   },
   {
     id: 9727,
@@ -1023,6 +1065,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/UAO2urG23S4"
   },
   {
     id: 10035,
@@ -1048,6 +1091,7 @@ export const videoGames: VideoGame[] = [
       "Indie"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/70d9irlxiB4"
   },
   {
     id: 112875,
@@ -1076,6 +1120,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/xf9e3c-nMRA"
   },
   {
     id: 28540,
@@ -1106,6 +1151,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/HHNLfxBxcvo"
   },
   {
     id: 119277,
@@ -1128,6 +1174,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/OotQrKEqe94"
   },
   {
     id: 127044,
@@ -1148,6 +1195,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/_3YNL0OWio0"
   },
   {
     id: 19560,
@@ -1171,6 +1219,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/g1wr0DfV73E"
   },
   {
     id: 26758,
@@ -1193,6 +1242,7 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/0HTfLqHoTmg"
   },
   {
     id: 114283,
@@ -1218,6 +1268,7 @@ export const videoGames: VideoGame[] = [
       "Horror"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/j5Xv2lM9wes"
   },
   {
     id: 119133,
@@ -1242,6 +1293,7 @@ export const videoGames: VideoGame[] = [
       "Shooter"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/qgvV4GE8vVA"
   },
   {
     id: 16,
@@ -1264,6 +1316,7 @@ export const videoGames: VideoGame[] = [
       "Shooter"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/s6I9CA6s1gw"
   },
   {
     id: 1887,
@@ -1291,6 +1344,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/CoYorK3E4aM"
   },
   {
     id: 538,
@@ -1317,6 +1371,7 @@ export const videoGames: VideoGame[] = [
       "Shooter"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/T9CcbwO9LFk"
   },
   {
     id: 9630,
@@ -1339,6 +1394,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/WAMBwnpO_SI"
   },
   {
     id: 7605,
@@ -1364,6 +1420,7 @@ export const videoGames: VideoGame[] = [
       "Turn-based"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/SKpSpvFCZRw"
   },
   {
     id: 103298,
@@ -1386,6 +1443,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/K09zxLiF5q0"
   },
   {
     id: 73,
@@ -1408,6 +1466,7 @@ export const videoGames: VideoGame[] = [
       "Shooter"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/PZK9vrBNRys"
   },
   {
     id: 1195,
@@ -1431,6 +1490,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/xnXlKrBItc0"
   },
   {
     id: 7352,
@@ -1457,6 +1517,7 @@ export const videoGames: VideoGame[] = [
       "Turn-based"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/_OduHbAUw0U"
   },
   {
     id: 11118,
@@ -1482,6 +1543,7 @@ export const videoGames: VideoGame[] = [
       "Role-playing"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/nk_K5DM0UTk"
   },
   {
     id: 11156,
@@ -1506,6 +1568,7 @@ export const videoGames: VideoGame[] = [
       "Platformer"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/NN-9SQXoi50"
   },
   {
     id: 132181,
@@ -1531,6 +1594,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/2AysHTv7X8k"
   },
   {
     id: 19164,
@@ -1556,6 +1620,7 @@ export const videoGames: VideoGame[] = [
       "Puzzle"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/ZKJUMMCJvGM"
   },
   {
     id: 113360,
@@ -1582,6 +1647,7 @@ export const videoGames: VideoGame[] = [
       "Survival"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/Rz2SNm8VguE"
   },
   {
     id: 58550,
@@ -1610,6 +1676,7 @@ export const videoGames: VideoGame[] = [
       "Metroidvania"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/RvGaSPTcTxc"
   },
   {
     id: 11739,
@@ -1638,6 +1705,7 @@ export const videoGames: VideoGame[] = [
       "Strategy"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/9SZUtyYSOjQ"
   },
   {
     id: 119388,
@@ -1662,6 +1730,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/-QFOJ_L6yFM"
   },
   {
     id: 427,
@@ -1688,6 +1757,7 @@ export const videoGames: VideoGame[] = [
       "Turn-based"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/riNzVUJumM8"
   },
   {
     id: 2457,
@@ -1712,6 +1782,7 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/zCa8w6mrDJg"
   },
   {
     id: 127,
@@ -1754,6 +1825,7 @@ export const videoGames: VideoGame[] = [
       "Platformer"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/EXnbMp1yr1k"
   },
   {
     id: 3072,
@@ -1781,6 +1853,7 @@ export const videoGames: VideoGame[] = [
       "Racing"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/SgSX3gOrj60"
   },
   {
     id: 11133,
@@ -1808,6 +1881,7 @@ export const videoGames: VideoGame[] = [
       "Party"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/0YKjFoGxbec"
   },
   {
     id: 9631,
@@ -1831,6 +1905,7 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/r5JIBaasuE8"
   },
   {
     id: 107299,
@@ -1856,6 +1931,7 @@ export const videoGames: VideoGame[] = [
       "Party"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/AyADwdiW7rQ"
   },
   {
     id: 24426,
@@ -1881,6 +1957,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/qFoh7ogDYl8"
   },
   {
     id: 386,
@@ -1902,6 +1979,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/6qR7JU33Ao4"
   },
   {
     id: 18225,
@@ -1926,6 +2004,7 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/_NElFLzgdUs"
   },
   {
     id: 19,
@@ -1948,6 +2027,7 @@ export const videoGames: VideoGame[] = [
       "Shooter"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/5Wavn29LMrs"
   },
   {
     id: 109462,
@@ -1969,6 +2049,7 @@ export const videoGames: VideoGame[] = [
       "MMORPG"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/vlVSJ0AvZe0"
   },
   {
     id: 113114,
@@ -1992,6 +2073,7 @@ export const videoGames: VideoGame[] = [
       "MMORPG"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/h542YbZuwkQ"
   },
   {
     id: 11370,
@@ -2016,6 +2098,7 @@ export const videoGames: VideoGame[] = [
       "Hack and slash"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/HukrLKMCz1I"
   },
   {
     id: 9882,
@@ -2038,6 +2121,7 @@ export const videoGames: VideoGame[] = [
       "Hack and slash"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/brZT-Qdg8TY"
   },
   {
     id: 29813,
@@ -2063,6 +2147,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/_jr8HkUAyJ4"
   },
   {
     id: 118226,
@@ -2088,6 +2173,7 @@ export const videoGames: VideoGame[] = [
       "Puzzle"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/gjIb9dQgUF0"
   },
   {
     id: 257,
@@ -2110,6 +2196,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/XiZIL-i39yc"
   },
   {
     id: 3025,
@@ -2131,6 +2218,7 @@ export const videoGames: VideoGame[] = [
       "Roguelike"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/lL2Qa0MQyuE"
   },
   {
     id: 117069,
@@ -2156,6 +2244,7 @@ export const videoGames: VideoGame[] = [
       "Hack and slash"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/U8lJRcUeEMs"
   },
   {
     id: 119171,
@@ -2176,6 +2265,7 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/9fVYKsEmuRo"
   },
   {
     id: 133136,
@@ -2199,6 +2289,7 @@ export const videoGames: VideoGame[] = [
       "Horror"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/dlQ3FeNu5Yw"
   },
   {
     id: 156052,
@@ -2221,6 +2312,7 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/bmj3ty-Wt48"
   },
   {
     id: 133358,
@@ -2246,6 +2338,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/BtyBjOW8sGY"
   },
   {
     id: 137009,
@@ -2270,6 +2363,7 @@ export const videoGames: VideoGame[] = [
       "Adventure"
     ],
     multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/kXZoKdr-xeo"
   },
   {
     id: 252637,
@@ -2295,5 +2389,54 @@ export const videoGames: VideoGame[] = [
       "Action"
     ],
     multiplayer: true,
+    trailer_url: "https://www.youtube.com/embed/kQJb8He0pYA"
+  },
+  {
+    id: 347668,
+    name: "Resident Evil Requiem",
+    url: "https://www.igdb.com/games/resident-evil-requiem",
+    synopsis: "A dual-narrative between veteran agent Leon S. Kennedy and new FBI analyst Grace Ashcroft investigating a fresh bioterror outbreak at a condemned hotel in Raccoon City. Set decades after the original incident, the story revisits the city's dark history, with Grace seeking answers about her mother, reporter Alyssa Ashcroft.",
+    avg_critic_rating: 8.9,
+    avg_user_rating: 8.7,
+    artwork_url: "https://images.igdb.com/igdb/image/upload/t_cover_big/cobmj0.jpg",
+    developer: "Capcom",
+    publisher: "Capcom",
+    initial_release_date: "02-26-2026",
+    platforms: [
+      "Windows",
+      "PlayStation 5",
+      "Xbox Series X/S",
+      "Nintendo Switch 2"
+    ],
+    genre: [
+      "Survival",
+      "Horror",
+      "Action"
+    ],
+    multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/9lrThxCoznw"
+  },
+  {
+    id: 8042,
+    name: "Mewgenics",
+    url: "https://www.igdb.com/games/mewgenics",
+    synopsis: "Adopt, breed and adventure with a crew of cats, featuring music by Ridiculon, from the creator of Super Meat Boy.",
+    avg_critic_rating: 9.1,
+    avg_user_rating: 7.4,
+    artwork_url: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9n5k.png",
+    developer: "Edmund McMillen and Tyler Glaiel",
+    publisher: "Edmund McMillen and Tyler Glaiel",
+    initial_release_date: "02-09-2026",
+    platforms: [
+      "Windows",
+    ],
+    genre: [
+      "Comedy",
+      "Turn-based",
+      "Role-playing",
+      "Adventure",
+    ],
+    multiplayer: false,
+    trailer_url: "https://www.youtube.com/embed/9ruLQ1Hmhjs"
   },
 ];
