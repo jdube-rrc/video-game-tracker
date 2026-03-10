@@ -104,7 +104,7 @@ function SearchBrowse({ visits, setVisits, favorites, onToggleFavorite }: Search
       </form>
 
       <div 
-        className={`transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`} // Fade effect on load and search changes
+        className={`transition-opacity duration-150 ${isVisible ? 'opacity-100' : 'opacity-0'}`} // Fade effect on load and search changes
       >
         <GameCatalog searchTerm={debouncedSearch} favorites={favorites} onToggleFavorite={onToggleFavorite} />
       </div>
