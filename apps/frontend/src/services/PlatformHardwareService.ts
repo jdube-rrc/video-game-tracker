@@ -1,31 +1,31 @@
-import HardwareRepository from "../repositories/PlatformHardwareRepository";
 import { type HardwareLog } from "../data/PlatformHardware";
 
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 const HardwareService = {
-  getLogs: async () => {
-    const logs = await HardwareRepository.getAllLogs();
-    // Business Rule: Sort by highest FPS first
-    return logs.sort((a, b) => b.averageFps - a.averageFps);
+  getLogs: async (): Promise<HardwareLog[]> => {
+    const response = await fetch(`${API_URL}/api/hardware-logs`);
+    
+    if (!response.ok) {
+      throw new Error("Failed to fetch hardware logs from the server.");
+    }
+    
+    return await response.json();
   },
 
-  submitLog: async (logData: Omit<HardwareLog, "id">) => {
-    // Business Rule Validations
-    if (logData.averageFps < 0) {
-      throw new Error("FPS cannot be negative.");
-    }
-    if (
-      logData.gameTitle.trim() === "" ||
-      logData.hardwareSpecs.trim() === ""
-    ) {
-      throw new Error("Game Title and Hardware Specs are required fields.");
-    }
+  submitLog: async (logData: Omit<HardwareLog, "id">): Promise<void> => {
+    const response = await fetch(`${API_URL}/api/hardware-logs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(logData),
+    });
 
-    const newLog: HardwareLog = {
-      ...logData,
-      id: Date.now(), // Generate a simple unique ID
-    };
-
-    await HardwareRepository.addLog(newLog);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to submit log.");
+    }
   },
 };
 
