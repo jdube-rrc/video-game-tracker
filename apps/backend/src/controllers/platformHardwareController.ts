@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import hardwareService from '../services/platformHardwareService';
+import hardwareService from '../services/platformHardwareService.js';
 
 export const getLogs = async (req: Request, res: Response): Promise<void> => {
     try {
