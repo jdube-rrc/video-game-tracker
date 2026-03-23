@@ -1,18 +1,16 @@
-import { videoGames, type VideoGame } from '../data/video_games';
+import { fetchGames, getGameById as fetchGameById } from '../apis/client';
+import type { VideoGame } from '../data/video_games';
 
 /**
- * Repository for accessing VideoGame data.
- * Currently uses local test data, but structured to allow easy swap to API.
+ * Repository for accessing VideoGame data from the backend API.
  */
 export const gameRepository = {
   getAll: async (): Promise<VideoGame[]> => {
-    await new Promise(resolve => setTimeout(resolve, 100)); // 100ms simulates network delay
-    return videoGames;
+    return await fetchGames();
   },
 
-  // Returns a single game by ID (Simulates 'Select * where id=?')
+  // Returns a single game by ID
   getById: async (id: number): Promise<VideoGame | undefined> => {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    return videoGames.find(game => game.id === id);
+    return await fetchGameById(id);
   }
 };
