@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getLogs, submitLog } from '../controllers/platformHardwareController';
+import { getLogs, submitLog } from '../controllers/platformHardwareController.js';
 
 const router = Router();
 
