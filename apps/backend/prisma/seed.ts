@@ -1,10 +1,24 @@
 import { PrismaClient } from '@prisma/client';
+import { videoGames } from '../src/data/videoGames.ts';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Keep seed idempotent and minimal for deployment environments.
-  console.log('Prisma seed completed (no-op).');
+  for (const game of videoGames) {
+    await prisma.videoGame.upsert({
+      where: { id: game.id },
+      update: {
+        ...game,
+        trailer_url: game.trailer_url ?? null,
+      },
+      create: {
+        ...game,
+        trailer_url: game.trailer_url ?? null,
+      },
+    });
+  }
+
+  console.log(`Prisma seed completed. Upserted ${videoGames.length} video games.`);
 }
 
 main()
