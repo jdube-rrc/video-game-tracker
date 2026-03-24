@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import gameService from '../services/gameService.js';
-import type { VideoGame } from '../data/videoGames.js';
+import type { VideoGame } from '@prisma/client';
 
 export const createGame = async (req: Request, res: Response): Promise<void> => {
   try {
