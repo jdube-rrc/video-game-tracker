@@ -21,3 +21,20 @@ model HardwareLog {
   averageFps    Float
   artwork_url   String?
 }
+
+model VideoGame {
+  id                   Int      @id
+  name                 String
+  url                  String
+  synopsis             String   @default("")
+  avg_critic_rating    Float    @default(0)
+  avg_user_rating      Float    @default(0)
+  artwork_url          String   @default("")
+  developer            String   @default("")
+  publisher            String   @default("")
+  initial_release_date String   @default("")
+  platforms            String[] @default([])
+  genre                String[] @default([])
+  multiplayer          Boolean  @default(false)
+  trailer_url          String?
+}
