@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+import gameRoutes from './routes/gameRoutes.js';
 import platformHardwareRoutes from './routes/platformHardwareRoutes.js';
 
 dotenv.config();
@@ -15,7 +16,8 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/api/platform-hardware', platformHardwareRoutes);
+app.use('/api/games', gameRoutes);
+app.use('/api/hardware-logs', platformHardwareRoutes);
 
 // Prevents CSP errors for favicon requests
 app.get('/favicon.ico', (_req, res) => res.status(204).end());
