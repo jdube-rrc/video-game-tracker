@@ -34,6 +34,26 @@ export async function getGameById(gameId: number): Promise<VideoGame> {
   return json.data;
 }
 
+export async function updateGameById(
+  gameId: number,
+  updates: Partial<Omit<VideoGame, 'id'>>
+): Promise<VideoGame> {
+  const response: Response = await fetch(`${BASE_URL}/games/${gameId}`, {
+    method: 'PUT',
+    body: JSON.stringify(updates),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update game with id ${gameId}`);
+  }
+
+  const json: GameResponseJSON = await response.json();
+  return json.data;
+}
+
 // ============ Favorites ============
 
 export async function fetchFavorites(userId: number): Promise<Favorite[]> {
