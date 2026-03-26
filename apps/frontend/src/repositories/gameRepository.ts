@@ -1,4 +1,4 @@
-import { fetchGames, getGameById as fetchGameById } from '../apis/client';
+import { fetchGames, getGameById as fetchGameById, updateGameById as patchGameById } from '../apis/client';
 import type { VideoGame } from '../data/video_games';
 
 /**
@@ -9,8 +9,21 @@ export const gameRepository = {
     return await fetchGames();
   },
 
-  // Returns a single game by ID
+  /**
+   * 
+   * @param id 
+   * 
+   * 
+   * @returns 
+   */
   getById: async (id: number): Promise<VideoGame | undefined> => {
     return await fetchGameById(id);
-  }
+  },
+
+  updateById: async (
+    id: number,
+    updates: Partial<Omit<VideoGame, 'id'>>
+  ): Promise<VideoGame> => {
+    return await patchGameById(id, updates);
+  },
 };
