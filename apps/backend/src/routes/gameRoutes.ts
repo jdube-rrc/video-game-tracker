@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { createGame, getAllGames, getGameById, searchGames } from '../controllers/gameController.js';
-import { gameSchema, validateRequest } from '../validations/index.js';
+import { createGame, getAllGames, getGameById, searchGames, updateGame } from '../controllers/gameController.js';
+import { gameSchema, updateGameSchema, validateRequest } from '../validations/index.js';
 
 const router = Router();
 
@@ -15,5 +15,8 @@ router.get('/search', searchGames);
 
 // GET game by ID
 router.get('/:id', getGameById);
+
+// PUT update game by ID
+router.put('/:id', validateRequest(updateGameSchema), updateGame);
 
 export default router;
