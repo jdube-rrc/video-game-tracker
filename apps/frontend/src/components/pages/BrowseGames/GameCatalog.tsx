@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { type VideoGame } from '../../../data/video_games';
-import { searchGames, getRandomSample, isGameFavorite } from '../../../services/gameService';
+import { useGames } from '../../../hooks/useGames/useGames';
 import GameCard from '../../common/game-card/GameCard';
 
 type GameCatalogProps = {
@@ -19,12 +19,19 @@ type GameCatalogProps = {
  * @returns The GameCatalog component.
  */
 export default function GameCatalog({ searchTerm = '', favorites = [], onToggleFavorite }: GameCatalogProps) {
+    const { games, isLoading, error } = useGames();
+
     // useMemo remembers the shuffled games to avoid reshuffling on every render,
     // this is to avoid expensive computations on each key stroke in the search input
     const displayedGames: VideoGame[] = useMemo(() => {
-        const filtered = searchGames(searchTerm);
-        return getRandomSample(filtered, 20);
-    }, [searchTerm]); // will only recompute if searchTerm changes
+        const normalizedTerm = searchTerm.toLowerCase().trim();
+        const filtered = !normalizedTerm
+            ? games
+            : games.filter((game) => game.name.toLowerCase().includes(normalizedTerm));
+
+        const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, 20);
+    }, [games, searchTerm]); // will only recompute if games or searchTerm changes
 
     if (searchTerm === "Mike") {
         return (
@@ -32,6 +39,22 @@ export default function GameCatalog({ searchTerm = '', favorites = [], onToggleF
                 Hi Mike! 👋
             </div>
         )
+    }
+
+    if (isLoading) { // show loading state while games are being fetched
+        return (
+            <div className="rounded-md border border-neutral-800 bg-neutral-900 p-6 text-center text-neutral-300">
+                Loading games...
+            </div>
+        );
+    }
+
+    if (error) { // show error message if there was an error fetching games
+        return (
+            <div className="rounded-md border border-red-900 bg-red-950/40 p-6 text-center text-red-200">
+                {error}
+            </div>
+        );
     }
 
     if (displayedGames.length === 0) {
@@ -48,7 +71,7 @@ export default function GameCatalog({ searchTerm = '', favorites = [], onToggleF
                 <GameCard 
                     key={game.id} 
                     game={game} 
-                    isFavorite={isGameFavorite(game.id, favorites)}
+                    isFavorite={favorites.some((fav) => fav.id === game.id)}
                     onToggleFavorite={onToggleFavorite}
                 />
             ))}
