@@ -83,3 +83,36 @@ export const gameSchema = Joi.object({
       'string.uri': 'Trailer URL must be a valid URI',
     }),
 });
+
+// Validation schema for game updates
+export const updateGameSchema = Joi.object({
+  name: Joi.string().trim(),
+  url: Joi.string().uri().messages({
+    'string.uri': 'URL must be a valid URI',
+  }),
+  synopsis: Joi.string().trim().allow(''),
+  avg_critic_rating: Joi.number().min(0).max(10).messages({
+    'number.min': 'Critic rating must be between 0 and 10',
+    'number.max': 'Critic rating must be between 0 and 10',
+  }),
+  avg_user_rating: Joi.number().min(0).max(10).messages({
+    'number.min': 'User rating must be between 0 and 10',
+    'number.max': 'User rating must be between 0 and 10',
+  }),
+  artwork_url: Joi.string().uri().messages({
+    'string.uri': 'Artwork URL must be a valid URI',
+  }),
+  developer: Joi.string().trim().allow(''),
+  publisher: Joi.string().trim().allow(''),
+  initial_release_date: Joi.string().allow(''),
+  platforms: Joi.array().items(Joi.string()),
+  genre: Joi.array().items(Joi.string()),
+  multiplayer: Joi.boolean(),
+  trailer_url: Joi.string().uri().allow(null).messages({
+    'string.uri': 'Trailer URL must be a valid URI',
+  }),
+})
+  .min(1)
+  .messages({
+    'object.min': 'At least one field is required to update a game',
+  });
