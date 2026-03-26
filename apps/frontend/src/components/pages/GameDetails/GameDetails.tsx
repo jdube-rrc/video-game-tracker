@@ -1,7 +1,8 @@
-import type { Dispatch, SetStateAction } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { type VideoGame } from '../../../data/video_games';
-import { getGameById, formatReleaseDate, isGameFavorite } from '../../../services/gameService';
+import { formatReleaseDate } from '../../../services/gameService';
+import { gameRepository } from '../../../repositories/gameRepository';
 
 type GameDetailsProps = {
   visits: number;
@@ -23,8 +24,125 @@ type GameDetailsProps = {
  */
 function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
   const { id } = useParams<{ id: string }>();
-  const game = getGameById(Number(id));
-  const isFavorite = game ? isGameFavorite(game.id, favorites) : false;
+  const gameId = Number(id);
+  const [game, setGame] = useState<VideoGame | null>(null); // used to store the loaded game details
+  const [isLoading, setIsLoading] = useState(true); // tracks loading state for the game details
+  const [error, setError] = useState<string | null>(null); // stores any error message that occurs during loading or saving
+  const [isEditing, setIsEditing] = useState(false); // tracks whether the edit form is open
+  const [isSaving, setIsSaving] = useState(false); // tracks whether the save operation is in progress to disable the save button and show loading state
+  const [formData, setFormData] = useState({ // formData is used to manage the state of the edit form inputs
+    name: '',
+    synopsis: '',
+    avg_critic_rating: 0,
+    avg_user_rating: 0,
+    developer: '',
+    publisher: '',
+    platformsText: '',
+    genreText: '',
+    multiplayer: false,
+  });
+
+  useEffect(() => { // loads the game details when the component mounts or when the gameId changes
+    const loadGame = async () => {
+      if (Number.isNaN(gameId)) {
+        setError('Invalid game ID.');
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const loaded = await gameRepository.getById(gameId);
+        if (!loaded) {
+          setGame(null);
+          return;
+        }
+
+        setGame(loaded);
+        setFormData({
+          name: loaded.name,
+          synopsis: loaded.synopsis,
+          avg_critic_rating: loaded.avg_critic_rating,
+          avg_user_rating: loaded.avg_user_rating,
+          developer: loaded.developer,
+          publisher: loaded.publisher,
+          platformsText: loaded.platforms.join(', '),
+          genreText: loaded.genre.join(', '),
+          multiplayer: loaded.multiplayer,
+        });
+      } catch (_err) {
+        setError('Failed to load game details.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadGame();
+  }, [gameId]);
+
+  const isFavorite = game ? favorites.some((fav) => fav.id === game.id) : false;
+
+  const handleSave = async () => {
+    if (!game) {
+      return;
+    }
+
+    setIsSaving(true);
+    setError(null);
+
+    try {
+      const updated = await gameRepository.updateById(game.id, { //this calls the repository to update the game details with the values from the formData state, 
+                                                                // converting platforms and genres back to arrays
+        name: formData.name,
+        synopsis: formData.synopsis,
+        avg_critic_rating: Number(formData.avg_critic_rating),
+        avg_user_rating: Number(formData.avg_user_rating),
+        developer: formData.developer,
+        publisher: formData.publisher,
+        platforms: formData.platformsText
+          .split(',')
+          .map((value) => value.trim())
+          .filter(Boolean),
+        genre: formData.genreText
+          .split(',')
+          .map((value) => value.trim())
+          .filter(Boolean),
+        multiplayer: formData.multiplayer,
+      });
+
+      setGame(updated);
+      setIsEditing(false);
+    } catch (_err) {
+      setError('Failed to save game changes.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6 text-center py-16">
+        <h1 className="text-3xl font-bold text-white">Loading Game...</h1>
+      </div>
+    );
+  }
+
+  if (error && !game) {
+    return (
+      <div className="space-y-6 text-center py-16">
+        <h1 className="text-3xl font-bold text-white">Unable To Load Game</h1>
+        <p className="text-neutral-400">{error}</p>
+        <Link
+          to="/browse"
+          className="inline-block px-4 py-2 bg-neutral-50 text-neutral-950 rounded-md font-medium hover:bg-neutral-200"
+        >
+          Back to Browse
+        </Link>
+      </div>
+    );
+  }
 
   if (!game) {
     return (
@@ -63,6 +181,26 @@ function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
             <p className="text-neutral-300 text-lg">
               {game.developer} • Released {formatReleaseDate(game.initial_release_date)}
             </p>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => setIsEditing((current) => !current)}
+                className="rounded-md border border-neutral-600 px-4 py-2 text-sm font-medium text-white hover:border-neutral-400"
+              >
+                {isEditing ? 'Close Editor' : 'Edit Game Card'}
+              </button>
+              {isEditing && (
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-400 disabled:opacity-60"
+                >
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </button>
+              )}
+            </div>
+            {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
           </div>
 
           {/* Media Row: Cover Art + Buttons | Trailer */}
@@ -181,6 +319,127 @@ function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
           </div>
         </div>
       </div>
+
+      {/* this renders the edit form when isEditing is true, allowing the user to edit the game details. 
+      The form inputs are controlled by the formData state, and the Save Changes button calls the handleSave 
+      function to save the changes */}
+      {isEditing && (
+        <div className="rounded-lg border border-neutral-700 bg-neutral-900 p-6 space-y-4">
+          <h2 className="text-xl font-bold text-white">Edit Game Card</h2>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-neutral-300">Name</span>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(event) => setFormData((prev) => ({ ...prev, name: event.target.value }))}
+              className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white"
+            />
+          </label>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-neutral-300">Synopsis</span>
+            <textarea
+              value={formData.synopsis}
+              onChange={(event) => setFormData((prev) => ({ ...prev, synopsis: event.target.value }))}
+              rows={4}
+              className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white"
+            />
+          </label>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <label className="block space-y-2">
+              <span className="text-sm text-neutral-300">Critic Rating (0-10)</span>
+              <input
+                type="number"
+                min={0}
+                max={10}
+                step={0.1}
+                value={formData.avg_critic_rating}
+                onChange={(event) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    avg_critic_rating: Number(event.target.value),
+                  }))
+                }
+                className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white"
+              />
+            </label>
+
+            <label className="block space-y-2">
+              <span className="text-sm text-neutral-300">User Rating (0-10)</span>
+              <input
+                type="number"
+                min={0}
+                max={10}
+                step={0.1}
+                value={formData.avg_user_rating}
+                onChange={(event) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    avg_user_rating: Number(event.target.value),
+                  }))
+                }
+                className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white"
+              />
+            </label>
+
+            <label className="block space-y-2">
+              <span className="text-sm text-neutral-300">Developer</span>
+              <input
+                type="text"
+                value={formData.developer}
+                onChange={(event) => setFormData((prev) => ({ ...prev, developer: event.target.value }))}
+                className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white"
+              />
+            </label>
+
+            <label className="block space-y-2">
+              <span className="text-sm text-neutral-300">Publisher</span>
+              <input
+                type="text"
+                value={formData.publisher}
+                onChange={(event) => setFormData((prev) => ({ ...prev, publisher: event.target.value }))}
+                className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white"
+              />
+            </label>
+          </div>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-neutral-300">Platforms (comma-separated)</span>
+            <input
+              type="text"
+              value={formData.platformsText}
+              onChange={(event) => setFormData((prev) => ({ ...prev, platformsText: event.target.value }))}
+              className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white"
+            />
+          </label>
+
+          <label className="block space-y-2">
+            <span className="text-sm text-neutral-300">Genres (comma-separated)</span>
+            <input
+              type="text"
+              value={formData.genreText}
+              onChange={(event) => setFormData((prev) => ({ ...prev, genreText: event.target.value }))}
+              className="w-full rounded-md border border-neutral-700 bg-neutral-950 px-3 py-2 text-white"
+            />
+          </label>
+
+          <label className="inline-flex items-center gap-3 text-neutral-200">
+            <input
+              type="checkbox"
+              checked={formData.multiplayer}
+              onChange={(event) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  multiplayer: event.target.checked,
+                }))
+              }
+            />
+            Multiplayer
+          </label>
+        </div>
+      )}
 
       {/* Platforms & Genres */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
