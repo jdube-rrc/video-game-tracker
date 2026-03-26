@@ -48,6 +48,27 @@ const gameService = {
         game.genre.some((g) => g.toLowerCase().includes(lowerQuery))
     );
   },
+
+  updateGame: async (
+    gameId: number,
+    updates: Partial<Omit<VideoGame, 'id'>>
+  ): Promise<VideoGame | null> => {
+    const existing = await prisma.videoGame.findUnique({
+      where: { id: gameId },
+    });
+
+    if (!existing) {
+      return null;
+    }
+
+    return prisma.videoGame.update({
+      where: { id: gameId },
+      data: {
+        ...updates,
+        trailer_url: updates.trailer_url ?? null,
+      },
+    });
+  },
 };
 
 export default gameService;
