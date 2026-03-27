@@ -1,12 +1,6 @@
 import type { VideoGame } from '../data/video_games';
 import type { Favorite } from '../types/Favorite';
 
-// Response types matching backend format
-type GamesResponseJSON = { message: string; data: VideoGame[] };
-type GameResponseJSON = { message: string; data: VideoGame };
-type FavoritesResponseJSON = { message: string; data: Favorite[] };
-type FavoriteResponseJSON = { message: string; data: Favorite };
-
 // Base URL from environment variable (Vite exposes via import.meta.env)
 const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;
 
