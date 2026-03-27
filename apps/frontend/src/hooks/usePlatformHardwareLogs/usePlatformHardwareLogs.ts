@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import HardwareService from "../../services/PlatformHardwareService";
+import { platformHardwareRepository } from "../../repositories/PlatformHardwareRepository";
 import { type CreateHardwareLogInput, type HardwareLog } from "../../data/PlatformHardware";
 
 /**
@@ -19,13 +19,13 @@ export function useHardwareLogs() {
   const [error, setError] = useState<string | null>(null);
 
   /**
-   * Fetches all hardware logs from the service asynchronously. 
+   * Fetches all hardware logs from the repository asynchronously.
    * Updates state with fetched data or error message.
    */
   const fetchLogs = async () => {
     setIsLoading(true);
     try {
-      const data = await HardwareService.getLogs();
+        const data = await platformHardwareRepository.getAll();
       setLogs(data);
       setError(null);
     } catch (err) {
@@ -43,14 +43,14 @@ export function useHardwareLogs() {
   }, []);
 
   /**
-   * Submits a new hardware log to the service.
+   * Submits a new hardware log to the repository.
    * Refreshes the log list when a submission is successful.
    * 
-   * @param {Omit<HardwareLog, "id">} newLogData - The log data to submit (excluding ID)
+   * @param {CreateHardwareLogInput} newLogData - The log data to submit
    */
   const addLog = async (newLogData: CreateHardwareLogInput) => {
     try {
-      await HardwareService.submitLog(newLogData);
+        await platformHardwareRepository.create(newLogData);
       await fetchLogs(); // Refresh the list so the new log appears immediately
       setError(null);
     } catch (err: any) {
