@@ -51,8 +51,11 @@ export async function updateGameById(
     throw new Error(`Failed to update game with id ${gameId}`);
   }
 
-  const json: GameResponseJSON = await response.json();
-  return json.data;
+  const json = await response.json();
+  if ('data' in json) {
+    return json.data;
+  }
+  throw new Error('Unexpected response format');
 }
 
 // ============ Favorites ============
@@ -64,8 +67,11 @@ export async function fetchFavorites(userId: number): Promise<Favorite[]> {
     throw new Error(`Failed to fetch favorites for user ${userId}`);
   }
 
-  const json: FavoritesResponseJSON = await response.json();
-  return json.data;
+  const json = await response.json();
+  if ('data' in json) {
+    return json.data;
+  }
+  throw new Error('Unexpected response format');
 }
 
 export async function addFavorite(userId: number, gameId: number): Promise<Favorite> {
@@ -81,8 +87,11 @@ export async function addFavorite(userId: number, gameId: number): Promise<Favor
     throw new Error(`Failed to add favorite`);
   }
 
-  const json: FavoriteResponseJSON = await response.json();
-  return json.data;
+  const json = await response.json();
+  if ('data' in json) {
+    return json.data;
+  }
+  throw new Error('Unexpected response format');
 }
 
 export async function removeFavorite(userId: number, gameId: number): Promise<void> {
