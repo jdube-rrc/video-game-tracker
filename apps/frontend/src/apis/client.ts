@@ -19,8 +19,12 @@ export async function fetchGames(): Promise<VideoGame[]> {
     throw new Error('Failed to fetch games');
   }
 
-  const json: GamesResponseJSON = await response.json();
-  return json.data;
+  const json = await response.json();
+  // Accept both { data, message } and { status, data, message }
+  if ('data' in json) {
+    return json.data;
+  }
+  throw new Error('Unexpected response format');
 }
 
 export async function getGameById(gameId: number): Promise<VideoGame> {
@@ -30,8 +34,11 @@ export async function getGameById(gameId: number): Promise<VideoGame> {
     throw new Error(`Failed to fetch game with id ${gameId}`);
   }
 
-  const json: GameResponseJSON = await response.json();
-  return json.data;
+  const json = await response.json();
+  if ('data' in json) {
+    return json.data;
+  }
+  throw new Error('Unexpected response format');
 }
 
 export async function updateGameById(
