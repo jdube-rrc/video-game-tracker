@@ -12,7 +12,7 @@ import { type VideoGame } from "../../../data/video_games";
  */
 export default function PlatformHardwareLog() {
   // Destructure everything we need from our custom hook
-  const { logs, isLoading, error, addLog } = useHardwareLogs();
+  const { logs, isLoading, error, addLog, updateLog } = useHardwareLogs();
 
   // Local state for the form inputs
   const [gameTitle, setGameTitle] = useState("");
@@ -28,6 +28,16 @@ export default function PlatformHardwareLog() {
   // Search Data State
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Edit state
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editFormData, setEditFormData] = useState({
+    os: "",
+    hardwareSpecs: "",
+    averageFps: 60,
+    reviewText: "",
+  });
+  const [editError, setEditError] = useState<string | null>(null);
 
   /**
    * Filters the available games based on the user's input in the game title field.
@@ -147,6 +157,61 @@ export default function PlatformHardwareLog() {
     setGameTitle(e.target.value);
     setIsDropdownOpen(true);
     if (formError) setFormError(null);
+  };
+
+  /**
+   * Opens the edit modal for a specific log.
+   */
+  const openEditModal = (log: typeof logs[0]) => {
+    setEditingId(log.id);
+    setEditFormData({
+      os: log.os,
+      hardwareSpecs: log.hardwareSpecs,
+      averageFps: log.averageFps,
+      reviewText: log.reviewText,
+    });
+    setEditError(null);
+  };
+
+  /**
+   * Closes the edit modal.
+   */
+  const closeEditModal = () => {
+    setEditingId(null);
+    setEditFormData({
+      os: "",
+      hardwareSpecs: "",
+      averageFps: 60,
+      reviewText: "",
+    });
+    setEditError(null);
+  };
+
+  /**
+   * Handles changes to edit form fields.
+   */
+  const handleEditChange = (field: keyof typeof editFormData, value: any) => {
+    setEditFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  /**
+   * Submits the edit form and calls updateLog.
+   */
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEditError(null);
+
+    if (!editingId) return;
+
+    try {
+      await updateLog(editingId, editFormData);
+      closeEditModal();
+    } catch (err: any) {
+      setEditError(err.message || "Failed to update log.");
+    }
   };
 
   if (isLoading) {
@@ -351,17 +416,25 @@ export default function PlatformHardwareLog() {
                       <h4 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
                         {gameTitle}
                       </h4>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          log.averageFps >= 60
-                            ? "bg-green-900/30 text-green-400 border border-green-900"
-                            : log.averageFps >= 30
-                              ? "bg-yellow-900/30 text-yellow-400 border border-yellow-900"
-                              : "bg-red-900/30 text-red-400 border border-red-900"
-                        }`}
-                      >
-                        {log.averageFps} FPS
-                      </span>
+                      <div className="flex gap-2 items-center">
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-medium ${
+                            log.averageFps >= 60
+                              ? "bg-green-900/30 text-green-400 border border-green-900"
+                              : log.averageFps >= 30
+                                ? "bg-yellow-900/30 text-yellow-400 border border-yellow-900"
+                                : "bg-red-900/30 text-red-400 border border-red-900"
+                          }`}
+                        >
+                          {log.averageFps} FPS
+                        </span>
+                        <button
+                          onClick={() => openEditModal(log)}
+                          className="px-2 py-1 rounded bg-neutral-800 text-neutral-400 text-xs hover:bg-neutral-700 hover:text-neutral-300 transition-colors border border-neutral-700"
+                        >
+                          Edit
+                        </button>
+                      </div>
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-4 text-sm">
@@ -387,6 +460,93 @@ export default function PlatformHardwareLog() {
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {editingId !== null && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-white mb-4">Edit Hardware Log</h3>
+            <form onSubmit={handleEditSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-400 mb-1">
+                  Operating System
+                </label>
+                <input
+                  type="text"
+                  placeholder="E.g. Windows 11, Ubuntu 22.04"
+                  value={editFormData.os}
+                  onChange={(e) => handleEditChange("os", e.target.value)}
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-400 mb-1">
+                  Hardware Specs
+                </label>
+                <input
+                  type="text"
+                  placeholder="E.g. RTX 4070, Ryzen 7 7800X3D"
+                  value={editFormData.hardwareSpecs}
+                  onChange={(e) => handleEditChange("hardwareSpecs", e.target.value)}
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-400 mb-1">
+                  Average FPS
+                </label>
+                <input
+                  type="number"
+                  value={editFormData.averageFps}
+                  onChange={(e) => handleEditChange("averageFps", Number(e.target.value))}
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
+                  min="0"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-400 mb-1">
+                  Review & Notes
+                </label>
+                <textarea
+                  placeholder="Describe performance details, setting tweaks, or issues..."
+                  value={editFormData.reviewText}
+                  onChange={(e) => handleEditChange("reviewText", e.target.value)}
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors min-h-24"
+                  required
+                />
+              </div>
+
+              {editError && (
+                <div className="bg-red-900/50 border border-red-800 text-red-200 p-3 rounded-lg text-sm">
+                  {editError}
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  type="submit"
+                  className="flex-1 bg-neutral-100 text-neutral-900 font-bold py-2 px-4 rounded-lg hover:bg-white active:bg-neutral-200 transition-colors"
+                >
+                  Save Changes
+                </button>
+                <button
+                  type="button"
+                  onClick={closeEditModal}
+                  className="flex-1 bg-neutral-800 text-neutral-300 font-bold py-2 px-4 rounded-lg hover:bg-neutral-700 active:bg-neutral-600 transition-colors border border-neutral-700"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

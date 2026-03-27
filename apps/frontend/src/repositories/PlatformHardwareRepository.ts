@@ -3,8 +3,7 @@ import { type CreateHardwareLogInput, type HardwareLog } from "../data/PlatformH
 
 /**
  * Repository for platform hardware logs backed by API calls.
- * 
- * 
+ * Provides methods to fetch all logs and submit new logs.
  */
 export const platformHardwareRepository = {
   getAll: async (): Promise<HardwareLog[]> => {
@@ -13,5 +12,9 @@ export const platformHardwareRepository = {
 
   create: async (logData: CreateHardwareLogInput): Promise<void> => {
     await HardwareService.submitLog(logData);
+  },
+
+  update: async (id: number, logData: Partial<CreateHardwareLogInput>): Promise<void> => {
+    await HardwareService.updateLog(id, logData);
   },
 };

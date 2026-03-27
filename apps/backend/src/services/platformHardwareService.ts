@@ -2,6 +2,7 @@ import { PrismaClient, HardwareLog } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+/// Service module for handling business logic related to patform & hardware compatibility logs.
 const hardwareService = {
   getLogs: async (): Promise<HardwareLog[]> => {
     return await prisma.hardwareLog.findMany({
