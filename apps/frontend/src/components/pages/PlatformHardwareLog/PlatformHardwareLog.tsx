@@ -93,8 +93,9 @@ export default function PlatformHardwareLog() {
       .filter(Boolean);
 
     return logs.filter((log) => {
+      const gameTitle = log.videoGame?.name ?? log.gameTitle ?? "";
       const logString =
-        `${log.gameTitle} ${log.os} ${log.hardwareSpecs} ${log.reviewText}`.toLowerCase();
+        `${gameTitle} ${log.os} ${log.hardwareSpecs} ${log.reviewText}`.toLowerCase();
       return keywords.every((keyword) => logString.includes(keyword));
     });
   }, [debouncedSearch, logs]);
@@ -122,12 +123,11 @@ export default function PlatformHardwareLog() {
 
     // Pass the flat data object to the hook
     await addLog({
-      gameTitle: selectedGame.name,
+      videoGameId: selectedGame.id,
       os,
       hardwareSpecs,
       averageFps,
       reviewText,
-      artwork_url: selectedGame.artwork_url,
     });
 
     // Clear the form after submission
@@ -329,12 +329,17 @@ export default function PlatformHardwareLog() {
                   key={log.id}
                   className="bg-neutral-900 p-5 rounded-xl border border-neutral-800 hover:border-neutral-700 transition-colors group flex gap-5"
                 >
+                  {(() => {
+                    const gameTitle = log.videoGame?.name ?? log.gameTitle ?? "Unknown Game";
+                    const artworkUrl = log.videoGame?.artwork_url ?? log.artwork_url;
+                    return (
+                      <>
                   {/* Artwork Column */}
-                  {log.artwork_url && (
+                  {artworkUrl && (
                     <div className="shrink-0">
                       <img
-                        src={log.artwork_url}
-                        alt={log.gameTitle}
+                        src={artworkUrl}
+                        alt={gameTitle}
                         className="w-16 h-24 object-cover rounded bg-neutral-800 shadow-md border border-neutral-800"
                       />
                     </div>
@@ -344,7 +349,7 @@ export default function PlatformHardwareLog() {
                   <div className="grow">
                     <div className="flex justify-between items-start mb-3">
                       <h4 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
-                        {log.gameTitle}
+                        {gameTitle}
                       </h4>
                       <span
                         className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -373,6 +378,9 @@ export default function PlatformHardwareLog() {
                       {log.reviewText}
                     </div>
                   </div>
+                      </>
+                    );
+                  })()}
                 </div>
               ))}
             </div>

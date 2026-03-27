@@ -1,7 +1,12 @@
-import { type HardwareLog } from "../data/PlatformHardware";
+import { type CreateHardwareLogInput, type HardwareLog } from "../data/PlatformHardware";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
+/**
+ * Service module for interacting with the backend API related to hardware compatibility logs.
+ * Provides methods to fetch all logs and submit new logs.
+ * Handles HTTP requests and responses, including error handling.
+ */
 const HardwareService = {
   getLogs: async (): Promise<HardwareLog[]> => {
     const response = await fetch(`${API_URL}/api/hardware-logs`);
@@ -13,7 +18,7 @@ const HardwareService = {
     return await response.json();
   },
 
-  submitLog: async (logData: Omit<HardwareLog, "id">): Promise<void> => {
+  submitLog: async (logData: CreateHardwareLogInput): Promise<void> => {
     const response = await fetch(`${API_URL}/api/hardware-logs`, {
       method: "POST",
       headers: {

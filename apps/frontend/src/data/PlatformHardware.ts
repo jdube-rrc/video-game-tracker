@@ -1,16 +1,31 @@
 export interface HardwareLog {
   id: number;
-  gameTitle: string;
+  videoGameId: number;
   reviewText: string;
   os: string;
   hardwareSpecs: string;
   averageFps: number;
+  gameTitle?: string;
   artwork_url?: string;
+  videoGame?: {
+    id: number;
+    name: string;
+    artwork_url?: string;
+  };
+}
+
+export interface CreateHardwareLogInput {
+  videoGameId: number;
+  reviewText: string;
+  os: string;
+  hardwareSpecs: string;
+  averageFps: number;
 }
 
 export const hardwareData: HardwareLog[] = [
   {
     id: 1,
+    videoGameId: 1,
     gameTitle: "Marvel Rivals",
     reviewText:
       "Proton Experimental works great, slight stutter on compiling shaders.",
@@ -22,6 +37,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 2,
+    videoGameId: 2,
     gameTitle: "Palworld",
     reviewText:
       "Running as a dedicated server, performance is incredibly stable.",
@@ -33,6 +49,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 3,
+    videoGameId: 3,
     gameTitle: "Cyberpunk 2077",
     reviewText:
       "Laptop runs hot, DLSS required for a stable framerate in crowded areas.",
@@ -44,6 +61,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 4,
+    videoGameId: 4,
     gameTitle: "Deadlock",
     reviewText: "Flawless performance on max settings.",
     os: "Windows 11",
@@ -54,6 +72,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 5,
+    videoGameId: 5,
     gameTitle: "Minecraft",
     reviewText: "Vanilla runs well, but struggles heavily with 200+ modpacks.",
     os: "NixOS",
@@ -64,6 +83,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 6,
+    videoGameId: 6,
     gameTitle: "Half-Life: Alyx",
     reviewText: "VR performance is locked and smooth, no nausea.",
     os: "Windows 11",
@@ -74,6 +94,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 7,
+    videoGameId: 7,
     gameTitle: "Elden Ring",
     reviewText: "Perfect 60fps cap maintained seamlessly.",
     os: "Arch Linux",
@@ -84,6 +105,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 8,
+    videoGameId: 8,
     gameTitle: "Valorant",
     reviewText: "Extremely high framerate, Vanguard strictly requires Windows.",
     os: "Windows 11",
@@ -94,6 +116,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 9,
+    videoGameId: 9,
     gameTitle: "Beat Saber",
     reviewText: "No headset tracking issues detected.",
     os: "Windows 11",
@@ -104,6 +127,7 @@ export const hardwareData: HardwareLog[] = [
   },
   {
     id: 10,
+    videoGameId: 10,
     gameTitle: "Terraria",
     reviewText: "Native Linux build runs flawlessly.",
     os: "NixOS",

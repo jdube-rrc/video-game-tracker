@@ -2,12 +2,11 @@ import Joi from 'joi';
 
 // Validation schema for creating a hardware log
 export const hardwareLogSchema = Joi.object({
-  gameTitle: Joi.string()
+  videoGameId: Joi.number()
     .required()
-    .trim()
     .messages({
-      'string.empty': 'Game title cannot be empty',
-      'any.required': 'Game title is required',
+      'any.required': 'Video Game ID is required',
+      'number.base': 'Video Game ID must be a number'
     }),
   
   reviewText: Joi.string()
@@ -42,26 +41,17 @@ export const hardwareLogSchema = Joi.object({
       'number.min': 'Average FPS cannot be negative',
       'any.required': 'Average FPS is required',
     }),
-  
-  artwork_url: Joi.string()
-    .uri()
-    .optional()
-    .allow(null, '')
-    .messages({
-      'string.uri': 'Artwork URL must be a valid URI',
-    }),
 });
 
 // Validation schema for updating a hardware log
 export const updateHardwareLogSchema = Joi.object({
-  gameTitle: Joi.string().trim(),
+  videoGameId: Joi.number().messages({
+    'number.base': 'Video Game ID must be a number'
+  }),
   reviewText: Joi.string().trim(),
   os: Joi.string().trim(),
   hardwareSpecs: Joi.string().trim(),
   averageFps: Joi.number().min(0).messages({
     'number.min': 'Average FPS cannot be negative',
-  }),
-  artwork_url: Joi.string().uri().allow(null, '').messages({
-    'string.uri': 'Artwork URL must be a valid URI',
   }),
 });

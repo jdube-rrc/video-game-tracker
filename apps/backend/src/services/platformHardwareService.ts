@@ -8,6 +8,9 @@ const hardwareService = {
       orderBy: {
         averageFps: 'desc', // Sorts by highest FPS first
       },
+      include: {
+        videoGame: true,
+      },
     });
   },
 
@@ -26,6 +29,9 @@ const hardwareService = {
   getLogById: async (id: number): Promise<HardwareLog | null> => {
     return await prisma.hardwareLog.findUnique({
       where: { id },
+      include: {
+        videoGame: true,
+      },
     });
   },
 

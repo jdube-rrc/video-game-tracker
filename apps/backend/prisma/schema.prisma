@@ -14,12 +14,13 @@ datasource db {
 
 model HardwareLog {
   id            Int     @id @default(autoincrement())
-  gameTitle     String
+  videoGameId   Int
   reviewText    String
   os            String
   hardwareSpecs String
   averageFps    Float
-  artwork_url   String?
+  
+  videoGame     VideoGame @relation(fields: [videoGameId], references: [id])
 }
 
 model VideoGame {
@@ -37,4 +38,5 @@ model VideoGame {
   genre                String[] @default([])
   multiplayer          Boolean  @default(false)
   trailer_url          String?
+  hardwareLogs         HardwareLog[]
 }

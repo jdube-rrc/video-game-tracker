@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import HardwareService from "../../services/PlatformHardwareService";
-import { type HardwareLog } from "../../data/PlatformHardware";
+import { type CreateHardwareLogInput, type HardwareLog } from "../../data/PlatformHardware";
 
 /**
  * Custom hook to manage hardware compatibility logs.
@@ -48,7 +48,7 @@ export function useHardwareLogs() {
    * 
    * @param {Omit<HardwareLog, "id">} newLogData - The log data to submit (excluding ID)
    */
-  const addLog = async (newLogData: Omit<HardwareLog, "id">) => {
+  const addLog = async (newLogData: CreateHardwareLogInput) => {
     try {
       await HardwareService.submitLog(newLogData);
       await fetchLogs(); // Refresh the list so the new log appears immediately
