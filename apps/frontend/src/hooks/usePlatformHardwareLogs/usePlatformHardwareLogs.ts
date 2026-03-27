@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import HardwareService from "../../services/PlatformHardwareService";
-import { type HardwareLog } from "../../data/PlatformHardware";
+import { platformHardwareRepository } from "../../repositories/PlatformHardwareRepository";
+import {
+  type CreateHardwareLogInput,
+  type HardwareLog,
+} from "../../data/PlatformHardware";
 
 /**
  * Custom hook to manage hardware compatibility logs.
  * Provides functionality to fetch existing logs and submit new ones.
  * Handles loading states and error management.
- * 
+ *
  * @returns {Object} An object containing:
  * @returns {HardwareLog[]} logs - The current array of compatibility logs
  * @returns {boolean} isLoading - Indicates if the data is currently being fetched
@@ -19,13 +22,13 @@ export function useHardwareLogs() {
   const [error, setError] = useState<string | null>(null);
 
   /**
-   * Fetches all hardware logs from the service asynchronously. 
+   * Fetches all hardware logs from the repository asynchronously.
    * Updates state with fetched data or error message.
    */
   const fetchLogs = async () => {
     setIsLoading(true);
     try {
-      const data = await HardwareService.getLogs();
+      const data = await platformHardwareRepository.getAll();
       setLogs(data);
       setError(null);
     } catch (err) {
@@ -43,14 +46,14 @@ export function useHardwareLogs() {
   }, []);
 
   /**
-   * Submits a new hardware log to the service.
+   * Submits a new hardware log to the repository.
    * Refreshes the log list when a submission is successful.
-   * 
-   * @param {Omit<HardwareLog, "id">} newLogData - The log data to submit (excluding ID)
+   *
+   * @param {CreateHardwareLogInput} newLogData - The log data to submit
    */
-  const addLog = async (newLogData: Omit<HardwareLog, "id">) => {
+  const addLog = async (newLogData: CreateHardwareLogInput) => {
     try {
-      await HardwareService.submitLog(newLogData);
+      await platformHardwareRepository.create(newLogData);
       await fetchLogs(); // Refresh the list so the new log appears immediately
       setError(null);
     } catch (err: any) {
@@ -58,5 +61,25 @@ export function useHardwareLogs() {
     }
   };
 
-  return { logs, isLoading, error, addLog };
+  /**
+   * Updates an existing hardware log.
+   * Refreshes the log list when an update is successful.
+   *
+   * @param {number} id - The ID of the log to update
+   * @param {Partial<CreateHardwareLogInput>} updateData - The fields to update
+   */
+  const updateLog = async (
+    id: number,
+    updateData: Partial<CreateHardwareLogInput>,
+  ) => {
+    try {
+      await platformHardwareRepository.update(id, updateData);
+      await fetchLogs(); // Refresh the list to show updated values
+      setError(null);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  return { logs, isLoading, error, addLog, updateLog };
 }

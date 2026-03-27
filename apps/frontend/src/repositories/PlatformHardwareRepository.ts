@@ -1,19 +1,20 @@
-import { hardwareData, type HardwareLog } from "../data/PlatformHardware";
+import HardwareService from "../services/PlatformHardwareService";
+import { type CreateHardwareLogInput, type HardwareLog } from "../data/PlatformHardware";
 
-const HardwareRepository = {
-  getAllLogs: async (): Promise<HardwareLog[]> => {
-    return new Promise((resolve) =>
-      setTimeout(() => resolve([...hardwareData]), 100),
-    ); // 100ms simulates network delay
+/**
+ * Repository for platform hardware logs backed by API calls.
+ * Provides methods to fetch all logs and submit new logs.
+ */
+export const platformHardwareRepository = {
+  getAll: async (): Promise<HardwareLog[]> => {
+    return await HardwareService.getLogs();
   },
-  addLog: async (log: HardwareLog): Promise<void> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        hardwareData.push(log);
-        resolve();
-      }, 100); // 100ms simulates network delay
-    });
+
+  create: async (logData: CreateHardwareLogInput): Promise<void> => {
+    await HardwareService.submitLog(logData);
+  },
+
+  update: async (id: number, logData: Partial<CreateHardwareLogInput>): Promise<void> => {
+    await HardwareService.updateLog(id, logData);
   },
 };
-
-export default HardwareRepository;
