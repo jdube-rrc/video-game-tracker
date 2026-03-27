@@ -1,15 +1,22 @@
-/*
-  Warnings:
+-- This migration duplicates earlier 3NF changes; make it safe to run repeatedly.
+ALTER TABLE "HardwareLog"
+DROP COLUMN IF EXISTS "artwork_url",
+DROP COLUMN IF EXISTS "gameTitle";
 
-  - You are about to drop the column `artwork_url` on the `HardwareLog` table. All the data in the column will be lost.
-  - You are about to drop the column `gameTitle` on the `HardwareLog` table. All the data in the column will be lost.
-  - Added the required column `videoGameId` to the `HardwareLog` table without a default value. This is not possible if the table is not empty.
+ALTER TABLE "HardwareLog"
+ADD COLUMN IF NOT EXISTS "videoGameId" INTEGER;
 
-*/
--- AlterTable
-ALTER TABLE "HardwareLog" DROP COLUMN "artwork_url",
-DROP COLUMN "gameTitle",
-ADD COLUMN     "videoGameId" INTEGER NOT NULL;
-
--- AddForeignKey
-ALTER TABLE "HardwareLog" ADD CONSTRAINT "HardwareLog_videoGameId_fkey" FOREIGN KEY ("videoGameId") REFERENCES "VideoGame"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'HardwareLog_videoGameId_fkey'
+  ) THEN
+    ALTER TABLE "HardwareLog"
+    ADD CONSTRAINT "HardwareLog_videoGameId_fkey"
+    FOREIGN KEY ("videoGameId") REFERENCES "VideoGame"("id")
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
+  END IF;
+END $$;
