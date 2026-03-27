@@ -12,15 +12,26 @@ const hardwareService = {
   },
 
   submitLog: async (logData: Omit<HardwareLog, 'id'>): Promise<HardwareLog> => {
-    if (logData.averageFps < 0) {
-      throw new Error("FPS cannot be negative.");
-    }
-    if (logData.gameTitle.trim() === "" || logData.hardwareSpecs.trim() === "") {
-      throw new Error("Game Title and Hardware Specs are required fields.");
-    }
-
     return await prisma.hardwareLog.create({
       data: logData,
+    });
+  },
+
+  updateLog: async (id: number, updateData: Partial<Omit<HardwareLog, 'id'>>): Promise<HardwareLog> => {
+    return await prisma.hardwareLog.update({
+      where: { id },
+      data: updateData,
+    });
+  },
+  getLogById: async (id: number): Promise<HardwareLog | null> => {
+    return await prisma.hardwareLog.findUnique({
+      where: { id },
+    });
+  },
+
+  deleteLog: async (id: number): Promise<HardwareLog> => {
+    return await prisma.hardwareLog.delete({
+      where: { id },
     });
   },
 };
