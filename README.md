@@ -88,3 +88,23 @@ All team members
 
 ### Service Layer Functionality
 All team members
+
+## Sprint 4
+
+### Back-end App Initialization
+Jared
+
+### Development SQL Database
+Jared
+
+### Prisma Setup
+Rayn and Jared
+
+### Back-end CORS Setup
+Jared
+
+### Resource frontend request, endpoint, schema and persistence for video game data
+Jared
+
+### Resource frontend request, endpoint, schema and persistence for hardware logs
+Rayn
