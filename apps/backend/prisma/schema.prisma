@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model HardwareLog {
+  id            Int     @id @default(autoincrement())
+  videoGameId   Int
+  reviewText    String
+  os            String
+  hardwareSpecs String
+  averageFps    Float
+  
+  videoGame     VideoGame @relation(fields: [videoGameId], references: [id])
+}
+
+model VideoGame {
+  id                   Int      @id
+  name                 String
+  url                  String
+  synopsis             String   @default("")
+  avg_critic_rating    Float    @default(0)
+  avg_user_rating      Float    @default(0)
+  artwork_url          String   @default("")
+  developer            String   @default("")
+  publisher            String   @default("")
+  initial_release_date String   @default("")
+  platforms            String[] @default([])
+  genre                String[] @default([])
+  multiplayer          Boolean  @default(false)
+  trailer_url          String?
+  hardwareLogs         HardwareLog[]
+}
