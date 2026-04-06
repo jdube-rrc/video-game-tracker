@@ -1,5 +1,15 @@
 {
   "relatedProjects": ["prj_129723iugWZVYjeL10PnV5eHCI9E"],
   "buildCommand": "npm run vercel-build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index"
+    }
+  ]
 }
