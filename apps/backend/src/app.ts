@@ -31,7 +31,7 @@ const getAllowedOrigins = (): (string|RegExp)[] => {
         if (url.hostname.endsWith('.vercel.app')) {
           // Allow all preview/prod subdomains for this project
           const [projectSlug] = url.hostname.split('.');
-          return new RegExp(`^https://${escapeRegex(projectSlug)}(-git-[a-z0-9-]+)?\\.vercel\\.app$`, 'i');
+          return new RegExp(`^https://${escapeRegex(projectSlug)}(?:-[a-z0-9-]+)?\\.vercel\\.app$`, 'i');
         }
       } catch {}
       return null;

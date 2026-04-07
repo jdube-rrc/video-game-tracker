@@ -1,8 +1,14 @@
 import type { VideoGame } from '../data/video_games';
 import type { Favorite } from '../types/Favorite';
 
-// Base URL from environment variable (Vite exposes via import.meta.env)
-const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api`;
+// Normalize API origin so env values work with or without protocol.
+const rawApiBaseUrl = String(import.meta.env.VITE_API_BASE_URL ?? '').trim();
+const normalizedApiOrigin = rawApiBaseUrl
+  ? (rawApiBaseUrl.startsWith('http://') || rawApiBaseUrl.startsWith('https://')
+    ? rawApiBaseUrl
+    : `https://${rawApiBaseUrl}`)
+  : '';
+const BASE_URL = `${normalizedApiOrigin.replace(/\/+$/, '')}/api`;
 
 // ============ Games ============
 
