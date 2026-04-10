@@ -33,7 +33,7 @@ export function useUserProfiles() {
    * Creates a new user profile by calling the profileService.
    * This is what the Registration component calls when the user submits the form.
    */
-  const createProfile = async (profileData: Omit<UserProfile, 'id'>) => {
+  const createProfile = async (profileData: UserProfile) => {
     try {
       const newProfile = await profileService.create(profileData);
       // Update the local list to include the newly created profile
@@ -48,7 +48,7 @@ export function useUserProfiles() {
   /**
    * Updates an existing user profile by calling the profileService.
    */
-  const updateProfile = async (id: number, updates: Partial<Omit<UserProfile, 'id'>>) => {
+  const updateProfile = async (id: string, updates: Partial<Omit<UserProfile, 'id'>>) => {
     try {
       const updated = await profileService.update(id, updates);
       if (updated) {
@@ -64,10 +64,11 @@ export function useUserProfiles() {
     }
   };
 
+
   /**
    * Deletes a user profile by calling the profileService.
    */
-  const deleteProfile = async (id: number) => {
+  const deleteProfile = async (id: string) => {
     try {
       const success = await profileService.delete(id);
       if (success) {
@@ -80,6 +81,7 @@ export function useUserProfiles() {
       throw error;
     }
   };
+
 
   return {
     profiles,

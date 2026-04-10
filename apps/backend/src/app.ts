@@ -9,7 +9,15 @@ dotenv.config();
 
 const app = express();
 
-
+/**
+ * CLERK INTEGRATION TODO:
+ * 1. Install @clerk/express: `npm install @clerk/express`
+ * 2. Import clerkMiddleware: `import { clerkMiddleware } from '@clerk/express'`
+ * 3. Use clerkMiddleware: `app.use(clerkMiddleware())`
+ * 4. Implement findOrCreateUser middleware to sync Clerk IDs to the 'User' model
+ *    created in the 3NF migration.
+ */
+// app.use(clerkMiddleware());
 const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // Get allowed origins from env and add Vercel preview/prod subdomains for frontend project

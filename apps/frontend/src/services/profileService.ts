@@ -124,17 +124,17 @@ export const profileService = {
    * @param id - The unique identifier of the user profile.
    * @returns A promise resolving to the user profile, or undefined if not found.
    */
-  getById: async (id: number): Promise<UserProfile | undefined> => {
+  getById: async (id: string): Promise<UserProfile | undefined> => {
     return userProfileRepository.getById(id);
   },
 
   /**
    * Creates a new user profile with the provided data.
    *
-   * @param profile - The user profile data to create (without ID).
-   * @returns A promise resolving to the newly created profile with an assigned ID.
+   * @param profile - The user profile data to create.
+   * @returns A promise resolving to the newly created profile.
    */
-  create: async (profile: Omit<UserProfile, 'id'>): Promise<UserProfile> => {
+  create: async (profile: UserProfile): Promise<UserProfile> => {
     return userProfileRepository.create(profile);
   },
 
@@ -146,7 +146,7 @@ export const profileService = {
    * @returns A promise resolving to the updated profile, or undefined if not found.
    */
   update: async (
-    id: number,
+    id: string,
     updates: Partial<Omit<UserProfile, 'id'>>
   ): Promise<UserProfile | undefined> => {
     return userProfileRepository.update(id, updates);
@@ -158,7 +158,8 @@ export const profileService = {
    * @param id - The unique identifier of the profile to delete.
    * @returns A promise resolving to true if deleted, false if not found.
    */
-  delete: async (id: number): Promise<boolean> => {
+  delete: async (id: string): Promise<boolean> => {
     return userProfileRepository.delete(id);
   },
+
 };

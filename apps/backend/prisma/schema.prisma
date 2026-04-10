@@ -24,19 +24,40 @@ model HardwareLog {
 }
 
 model VideoGame {
-  id                   Int      @id
+  id                   Int           @id
   name                 String
   url                  String
-  synopsis             String   @default("")
-  avg_critic_rating    Float    @default(0)
-  avg_user_rating      Float    @default(0)
-  artwork_url          String   @default("")
-  developer            String   @default("")
-  publisher            String   @default("")
-  initial_release_date String   @default("")
-  platforms            String[] @default([])
-  genre                String[] @default([])
-  multiplayer          Boolean  @default(false)
+  synopsis             String        @default("")
+  avg_critic_rating    Float         @default(0)
+  avg_user_rating      Float         @default(0)
+  artwork_url          String        @default("")
+  developer            String        @default("")
+  publisher            String        @default("")
+  initial_release_date String        @default("")
+  platforms            String[]      @default([])
+  genre                String[]      @default([]) // This field in VideoGame can stay for metadata, but User favorites use the Genre relation
+  multiplayer          Boolean       @default(false)
   trailer_url          String?
   hardwareLogs         HardwareLog[]
+  favoritedBy          User[]        @relation("UserFavoriteGames")
 }
+
+model User {
+  id            String      @id // Clerk UUID
+  email         String      @unique
+  displayName   String
+  avatar        String?
+  biography     String?
+  tagline       String?
+  favoriteGames VideoGame[] @relation("UserFavoriteGames")
+  favoriteGenres Genre[]     @relation("UserFavoriteGenres")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Genre {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  users User[] @relation("UserFavoriteGenres")
+}
+

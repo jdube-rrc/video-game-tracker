@@ -18,7 +18,20 @@ async function main() {
     });
   }
 
-  console.log(`Prisma seed completed. Upserted ${videoGames.length} video games.`);
+  const genres = [
+    'Action', 'Adventure', 'RPG', 'Strategy', 'Shooter', 'Sports', 'Racing', 'Fighting', 'Platformer', 'Puzzle', 'Simulation', 'Horror', 'Indie'
+  ];
+
+  for (const genreName of genres) {
+    await prisma.genre.upsert({
+      where: { name: genreName },
+      update: {},
+      create: { name: genreName },
+    });
+  }
+
+  console.log(`Prisma seed completed. Upserted ${videoGames.length} video games and ${genres.length} genres.`);
+
 }
 
 main()
