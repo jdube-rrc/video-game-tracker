@@ -3,7 +3,7 @@
  * A user profile represents a player's account and preferences.
  */
 export interface UserProfile {
-  id: number;
+  id: string; // Clerk UUID or placeholder for test data
   username: string;
   email: string;
   tagline: string;
@@ -18,7 +18,7 @@ export interface UserProfile {
  */
 export const userProfiles: UserProfile[] = [
   {
-    id: 1,
+    id: '1',
     username: 'PixelRanger',
     email: 'pixel@example.com',
     tagline: 'Co-op first, speedruns second.',
@@ -26,7 +26,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-11-15',
   },
   {
-    id: 2,
+    id: '2',
     username: 'SilentHunter',
     email: 'silent@example.com',
     tagline: 'Stealth games are life.',
@@ -34,7 +34,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-10-20',
   },
   {
-    id: 3,
+    id: '3',
     username: 'CasualGamer',
     email: 'casual@example.com',
     tagline: 'Here for the vibes.',
@@ -42,7 +42,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-09-05',
   },
   {
-    id: 4,
+    id: '4',
     username: 'CompetitivePro',
     email: 'competitive@example.com',
     tagline: 'Rank 1 or bust.',
@@ -50,7 +50,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-08-12',
   },
   {
-    id: 5,
+    id: '5',
     username: 'StoryDiver',
     email: 'story@example.com',
     tagline: 'Plot twists > graphics.',
@@ -58,7 +58,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-07-30',
   },
   {
-    id: 6,
+    id: '6',
     username: 'NoLifeGamer',
     email: 'nolife@example.com',
     tagline: 'What is sleep?',
@@ -66,7 +66,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-06-18',
   },
   {
-    id: 7,
+    id: '7',
     username: 'RetroFan',
     email: 'retro@example.com',
     tagline: 'Pixel art > ultra-realistic.',
@@ -74,7 +74,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-05-22',
   },
   {
-    id: 8,
+    id: '8',
     username: 'CasualStreamer',
     email: 'streamer@example.com',
     tagline: 'Making games look easy since 2024.',
@@ -82,7 +82,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-04-10',
   },
   {
-    id: 9,
+    id: '9',
     username: 'PuzzleMaster',
     email: 'puzzle@example.com',
     tagline: 'Brain > brawn.',
@@ -90,7 +90,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-03-05',
   },
   {
-    id: 10,
+    id: '10',
     username: 'SoulsLikeEnthusiast',
     email: 'soulslike@example.com',
     tagline: 'Pain is temporary, victory is forever.',
@@ -98,7 +98,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-02-14',
   },
   {
-    id: 11,
+    id: '11',
     username: 'IndieGameLover',
     email: 'indie@example.com',
     tagline: 'Supporting small devs with big dreams.',
@@ -106,3 +106,4 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-01-28',
   },
 ];
+

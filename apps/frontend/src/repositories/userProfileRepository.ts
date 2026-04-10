@@ -24,7 +24,7 @@ export const userProfileRepository = {
    * @param id - The unique identifier of the user profile.
    * @returns A promise resolving to the user profile, or undefined if not found.
    */
-  getById: async (id: number): Promise<UserProfile | undefined> => {
+  getById: async (id: string): Promise<UserProfile | undefined> => {
     await new Promise(resolve => setTimeout(resolve, 100));
     return userProfiles.find(profile => profile.id === id);
   },
@@ -33,16 +33,13 @@ export const userProfileRepository = {
    * Creates a new user profile and adds it to the collection.
    * In a real app, this would send data to a database.
    *
-   * @param profile - The user profile object to create (without an ID).
-   * @returns A promise resolving to the newly created profile with an assigned ID.
+   * @param profile - The user profile object to create.
+   * @returns A promise resolving to the newly created profile.
    */
-  create: async (profile: Omit<UserProfile, 'id'>): Promise<UserProfile> => {
+  create: async (profile: UserProfile): Promise<UserProfile> => {
     await new Promise(resolve => setTimeout(resolve, 100));
-    // Generate a new ID (in production, the database would do this)
-    const newId = Math.max(...userProfiles.map(p => p.id), 0) + 1;
-    const newProfile: UserProfile = { ...profile, id: newId };
-    userProfiles.push(newProfile);
-    return newProfile;
+    userProfiles.push(profile);
+    return profile;
   },
 
   /**
@@ -54,7 +51,7 @@ export const userProfileRepository = {
    * @returns A promise resolving to the updated profile, or undefined if not found.
    */
   update: async (
-    id: number,
+    id: string,
     updates: Partial<Omit<UserProfile, 'id'>>
   ): Promise<UserProfile | undefined> => {
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -72,11 +69,12 @@ export const userProfileRepository = {
    * @param id - The unique identifier of the profile to delete.
    * @returns A promise resolving to true if deleted, false if not found.
    */
-  delete: async (id: number): Promise<boolean> => {
+  delete: async (id: string): Promise<boolean> => {
     await new Promise(resolve => setTimeout(resolve, 100));
     const index = userProfiles.findIndex(p => p.id === id);
     if (index === -1) return false;
     userProfiles.splice(index, 1);
     return true;
   },
+
 };
