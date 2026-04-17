@@ -1,3 +1,4 @@
+import type { TokenProvider } from '../apis/client';
 import HardwareService from "../services/PlatformHardwareService";
 import { type CreateHardwareLogInput, type HardwareLog } from "../data/PlatformHardware";
 
@@ -10,11 +11,11 @@ export const platformHardwareRepository = {
     return await HardwareService.getLogs();
   },
 
-  create: async (logData: CreateHardwareLogInput): Promise<void> => {
-    await HardwareService.submitLog(logData);
+  create: async (logData: CreateHardwareLogInput, getToken?: TokenProvider): Promise<void> => {
+    await HardwareService.submitLog(logData, getToken);
   },
 
-  update: async (id: number, logData: Partial<CreateHardwareLogInput>): Promise<void> => {
-    await HardwareService.updateLog(id, logData);
+  update: async (id: number, logData: Partial<CreateHardwareLogInput>, getToken?: TokenProvider): Promise<void> => {
+    await HardwareService.updateLog(id, logData, getToken);
   },
 };
