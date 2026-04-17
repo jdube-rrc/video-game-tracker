@@ -1,16 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAuth } from '@clerk/clerk-react';
 import { favoriteService } from "../../services/favoriteService";
 import type { VideoGame } from "../../data/video_games";
 
 /**
  * Custom hook to manage the user's favorite video games.
- * Note: Uses a hardcoded userId (1) since authentication isn't implemented yet.
  *
  * @returns An object containing favorites state, toggle function, and status indicators.
  */
 export function useFavorites() {
-  // Hardcoded user ID - would come from auth context in a real app
-  const userId = 1;
+  const { getToken, isSignedIn } = useAuth();
 
   const [favorites, setFavorites] = useState<VideoGame[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,17 +19,24 @@ export function useFavorites() {
    * Fetches the user's favorite games from the service layer.
    */
   const fetchFavorites = useCallback(async () => {
+    if (!isSignedIn) {
+      setFavorites([]);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     try {
-      const userFavorites = await favoriteService.getUserFavoriteGames(userId);
+      const userFavorites = await favoriteService.getUserFavoriteGames(getToken);
       setFavorites(userFavorites);
     } catch (err) {
       setError("Failed to load favorites.");
     } finally {
       setIsLoading(false);
     }
-  }, [userId]);
+  }, [getToken, isSignedIn]);
 
   /**
    * Load favorites on mount.
@@ -47,6 +53,11 @@ export function useFavorites() {
    */
   const toggleFavorite = useCallback(
     async (game: VideoGame) => {
+      if (!isSignedIn) {
+        setError('You must sign in to save favorites.');
+        return;
+      }
+
       // Optimistic update - immediately update UI
       const isCurrentlyFavorite = favorites.some((f) => f.id === game.id);
       
@@ -58,7 +69,8 @@ export function useFavorites() {
 
       try {
         // Sync with backend via service layer
-        await favoriteService.toggleFavorite(userId, game.id);
+        await favoriteService.toggleFavorite(game.id, isCurrentlyFavorite, getToken);
+        setError(null);
       } catch (err) {
         // Revert optimistic update on error
         if (isCurrentlyFavorite) {
@@ -69,7 +81,7 @@ export function useFavorites() {
         setError("Failed to update favorite.");
       }
     },
-    [favorites, userId]
+    [favorites, getToken, isSignedIn]
   );
 
   /**
