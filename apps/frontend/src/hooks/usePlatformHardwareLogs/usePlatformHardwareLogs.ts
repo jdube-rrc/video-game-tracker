@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from '@clerk/clerk-react';
 import { platformHardwareRepository } from "../../repositories/PlatformHardwareRepository";
 import {
   type CreateHardwareLogInput,
@@ -17,6 +18,7 @@ import {
  * @returns {function} addLog - Function to submit a new log to the service
  */
 export function useHardwareLogs() {
+  const { getToken } = useAuth();
   const [logs, setLogs] = useState<HardwareLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,7 +55,7 @@ export function useHardwareLogs() {
    */
   const addLog = async (newLogData: CreateHardwareLogInput) => {
     try {
-      await platformHardwareRepository.create(newLogData);
+      await platformHardwareRepository.create(newLogData, getToken);
       await fetchLogs(); // Refresh the list so the new log appears immediately
       setError(null);
     } catch (err: any) {
@@ -73,7 +75,7 @@ export function useHardwareLogs() {
     updateData: Partial<CreateHardwareLogInput>,
   ) => {
     try {
-      await platformHardwareRepository.update(id, updateData);
+      await platformHardwareRepository.update(id, updateData, getToken);
       await fetchLogs(); // Refresh the list to show updated values
       setError(null);
     } catch (err: any) {
