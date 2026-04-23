@@ -15,12 +15,14 @@ datasource db {
 model HardwareLog {
   id            Int     @id @default(autoincrement())
   videoGameId   Int
+  userId        String? // Clerk UUID
   reviewText    String
   os            String
   hardwareSpecs String
   averageFps    Float
   
   videoGame     VideoGame @relation(fields: [videoGameId], references: [id])
+  user          User?     @relation(fields: [userId], references: [id])
 }
 
 model VideoGame {
@@ -51,6 +53,7 @@ model User {
   tagline       String?
   favoriteGames VideoGame[] @relation("UserFavoriteGames")
   favoriteGenres Genre[]     @relation("UserFavoriteGenres")
+  hardwareLogs  HardwareLog[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }

@@ -54,6 +54,22 @@ const HardwareService = {
       throw new Error(errorData.message || "Failed to update log.");
     }
   },
+
+  deleteLog: async (id: number, getToken?: TokenProvider): Promise<void> => {
+    const token = getToken ? await getToken() : null;
+
+    const response = await fetch(`${API_URL}/api/hardware-logs/${id}`, {
+      method: "DELETE",
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to delete log.");
+    }
+  },
 };
 
 export default HardwareService;

@@ -18,4 +18,8 @@ export const platformHardwareRepository = {
   update: async (id: number, logData: Partial<CreateHardwareLogInput>, getToken?: TokenProvider): Promise<void> => {
     await HardwareService.updateLog(id, logData, getToken);
   },
+
+  delete: async (id: number, getToken?: TokenProvider): Promise<void> => {
+    await HardwareService.deleteLog(id, getToken);
+  },
 };

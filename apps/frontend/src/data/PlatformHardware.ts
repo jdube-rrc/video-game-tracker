@@ -1,5 +1,6 @@
 export interface HardwareLog {
   id: number;
+  userId?: string;
   videoGameId: number;
   reviewText: string;
   os: string;
