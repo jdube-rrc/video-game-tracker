@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
+import { useUser, SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
 import { useHardwareLogs } from "../../../hooks/usePlatformHardwareLogs/usePlatformHardwareLogs";
 import { getAllGames } from "../../../services/gameService";
 import { type VideoGame } from "../../../data/video_games";
@@ -11,8 +12,11 @@ import { type VideoGame } from "../../../data/video_games";
  * Includes search functionality to filter logs by keywords.
  */
 export default function PlatformHardwareLog() {
-  // Destructure everything we need from our custom hook
-  const { logs, isLoading, error, addLog, updateLog } = useHardwareLogs();
+  const { user } = useUser();
+  const { logs, isLoading, error, addLog, updateLog, deleteLog } = useHardwareLogs();
+  
+  const currentUserId = user?.id;
+  const isAdmin = user?.publicMetadata?.role === "admin";
 
   // Local state for the form inputs
   const [gameTitle, setGameTitle] = useState("");
@@ -238,107 +242,117 @@ export default function PlatformHardwareLog() {
         {/* Left Side: The Form */}
         <div className="lg:col-span-1">
           <div className="bg-neutral-900 p-6 rounded-xl border border-neutral-800 sticky top-6">
-            <h3 className="text-xl font-bold text-white mb-4">Submit a Log</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Game Title Dropdown Search */}
-              <div className="relative" ref={dropdownRef}>
-                <label className="block text-sm font-medium text-neutral-400 mb-1">
-                  Game Title
-                </label>
-                <input
-                  type="text"
-                  placeholder="Search for a game..."
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
-                  value={gameTitle}
-                  onChange={handleTitleChange}
-                  onFocus={() => setIsDropdownOpen(true)}
-                  required
-                />
+            <SignedIn>
+              <h3 className="text-xl font-bold text-white mb-4">Submit a Log</h3>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Game Title Dropdown Search */}
+                <div className="relative" ref={dropdownRef}>
+                  <label className="block text-sm font-medium text-neutral-400 mb-1">
+                    Game Title
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Search for a game..."
+                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
+                    value={gameTitle}
+                    onChange={handleTitleChange}
+                    onFocus={() => setIsDropdownOpen(true)}
+                    required
+                  />
 
-                {/* Dropdown Menu */}
-                {isDropdownOpen && derivedGames.length > 0 && (
-                  <ul className="absolute z-10 w-full mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                    {derivedGames.map((game) => (
-                      <li
-                        key={game.id}
-                        onClick={() => handleGameSelect(game)}
-                        className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-700 cursor-pointer text-white border-b border-neutral-700 last:border-0 transition-colors"
-                      >
-                        <img
-                          src={game.artwork_url}
-                          alt={game.name}
-                          className="w-10 h-14 object-cover rounded bg-neutral-900"
-                        />
-                        <span className="font-medium">{game.name}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                  {/* Dropdown Menu */}
+                  {isDropdownOpen && derivedGames.length > 0 && (
+                    <ul className="absolute z-10 w-full mt-1 bg-neutral-800 border border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      {derivedGames.map((game) => (
+                        <li
+                          key={game.id}
+                          onClick={() => handleGameSelect(game)}
+                          className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-700 cursor-pointer text-white border-b border-neutral-700 last:border-0 transition-colors"
+                        >
+                          <img
+                            src={game.artwork_url}
+                            alt={game.name}
+                            className="w-10 h-14 object-cover rounded bg-neutral-900"
+                          />
+                          <span className="font-medium">{game.name}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-400 mb-1">
+                    Operating System
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="E.g. Windows 11, Ubuntu 22.04"
+                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
+                    value={os}
+                    onChange={(e) => setOs(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-400 mb-1">
+                    Hardware Specs
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="E.g. RTX 4070, Ryzen 7 7800X3D"
+                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
+                    value={hardwareSpecs}
+                    onChange={(e) => setHardwareSpecs(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-400 mb-1">
+                    Average FPS
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="60"
+                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
+                    value={averageFps}
+                    onChange={(e) => setAverageFps(Number(e.target.value))}
+                    min="0"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-400 mb-1">
+                    Review & Notes
+                  </label>
+                  <textarea
+                    placeholder="Describe performance details, setting tweaks, or issues..."
+                    className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors min-h-30"
+                    value={reviewText}
+                    onChange={(e) => setReviewText(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-neutral-100 text-neutral-900 font-bold py-3 px-4 rounded-lg hover:bg-white active:bg-neutral-200 transition-colors"
+                >
+                  Submit Log
+                </button>
+              </form>
+            </SignedIn>
+            <SignedOut>
+              <div className="text-center py-6 space-y-4">
+                <p className="text-neutral-400">Log in to share your hardware performance reviews!</p>
+                <div className="inline-block bg-neutral-100 text-neutral-900 font-bold py-2 px-6 rounded-lg hover:bg-white cursor-pointer transition-colors">
+                  <SignInButton />
+                </div>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-400 mb-1">
-                  Operating System
-                </label>
-                <input
-                  type="text"
-                  placeholder="E.g. Windows 11, Ubuntu 22.04"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
-                  value={os}
-                  onChange={(e) => setOs(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-400 mb-1">
-                  Hardware Specs
-                </label>
-                <input
-                  type="text"
-                  placeholder="E.g. RTX 4070, Ryzen 7 7800X3D"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
-                  value={hardwareSpecs}
-                  onChange={(e) => setHardwareSpecs(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-400 mb-1">
-                  Average FPS
-                </label>
-                <input
-                  type="number"
-                  placeholder="60"
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors"
-                  value={averageFps}
-                  onChange={(e) => setAverageFps(Number(e.target.value))}
-                  min="0"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-400 mb-1">
-                  Review & Notes
-                </label>
-                <textarea
-                  placeholder="Describe performance details, setting tweaks, or issues..."
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-lg p-3 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 transition-colors min-h-30"
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-neutral-100 text-neutral-900 font-bold py-3 px-4 rounded-lg hover:bg-white active:bg-neutral-200 transition-colors"
-              >
-                Submit Log
-              </button>
-            </form>
+            </SignedOut>
 
             {/* Display Business Logic Errors */}
             {(error || formError) && (
@@ -416,25 +430,40 @@ export default function PlatformHardwareLog() {
                       <h4 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">
                         {gameTitle}
                       </h4>
-                      <div className="flex gap-2 items-center">
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm font-medium ${
-                            log.averageFps >= 60
-                              ? "bg-green-900/30 text-green-400 border border-green-900"
-                              : log.averageFps >= 30
-                                ? "bg-yellow-900/30 text-yellow-400 border border-yellow-900"
-                                : "bg-red-900/30 text-red-400 border border-red-900"
-                          }`}
-                        >
-                          {log.averageFps} FPS
-                        </span>
-                        <button
-                          onClick={() => openEditModal(log)}
-                          className="px-2 py-1 rounded bg-neutral-800 text-neutral-400 text-xs hover:bg-neutral-700 hover:text-neutral-300 transition-colors border border-neutral-700"
-                        >
-                          Edit
-                        </button>
-                      </div>
+                        <div className="flex gap-2 items-center">
+                          <span
+                            className={`px-3 py-1 rounded-full text-sm font-medium ${
+                              log.averageFps >= 60
+                                ? "bg-green-900/30 text-green-400 border border-green-900"
+                                : log.averageFps >= 30
+                                  ? "bg-yellow-900/30 text-yellow-400 border border-yellow-900"
+                                  : "bg-red-900/30 text-red-400 border border-red-900"
+                            }`}
+                          >
+                            {log.averageFps} FPS
+                          </span>
+                          
+                          {(currentUserId === log.userId || isAdmin) && (
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => openEditModal(log)}
+                                className="px-2 py-1 rounded bg-neutral-800 text-neutral-400 text-xs hover:bg-neutral-700 hover:text-neutral-300 transition-colors border border-neutral-700"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (confirm("Are you sure you want to delete this log?")) {
+                                    deleteLog(log.id);
+                                  }
+                                }}
+                                className="px-2 py-1 rounded bg-red-900/20 text-red-400 text-xs hover:bg-red-900/40 hover:text-red-300 transition-colors border border-red-900"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-4 text-sm">

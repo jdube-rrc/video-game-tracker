@@ -16,6 +16,8 @@ import {
  * @returns {boolean} isLoading - Indicates if the data is currently being fetched
  * @returns {string | null} error - Holds any error messages from fetching or adding
  * @returns {function} addLog - Function to submit a new log to the service
+ * @returns {function} updateLog - Function to update an existing log
+ * @returns {function} deleteLog - Function to delete an existing log
  */
 export function useHardwareLogs() {
   const { getToken } = useAuth();
@@ -83,5 +85,21 @@ export function useHardwareLogs() {
     }
   };
 
-  return { logs, isLoading, error, addLog, updateLog };
+  /**
+   * Deletes a hardware log by its ID.
+   * Refreshes the log list upon success.
+   *
+   * @param {number} id - The ID of the log to delete
+   */
+  const deleteLog = async (id: number) => {
+    try {
+      await platformHardwareRepository.delete(id, getToken);
+      await fetchLogs();
+      setError(null);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  return { logs, isLoading, error, addLog, updateLog, deleteLog };
 }
