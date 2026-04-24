@@ -1,14 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { clerkMiddleware } from '@clerk/express';
 
+import favoriteRoutes from './routes/favoriteRoutes.js';
 import gameRoutes from './routes/gameRoutes.js';
 import platformHardwareRoutes from './routes/platformHardwareRoutes.js';
 
 dotenv.config();
 
 const app = express();
-
 
 const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -31,7 +32,7 @@ const getAllowedOrigins = (): (string|RegExp)[] => {
         if (url.hostname.endsWith('.vercel.app')) {
           // Allow all preview/prod subdomains for this project
           const [projectSlug] = url.hostname.split('.');
-          return new RegExp(`^https://${escapeRegex(projectSlug)}(-git-[a-z0-9-]+)?\\.vercel\\.app$`, 'i');
+          return new RegExp(`^https://${escapeRegex(projectSlug)}(?:-[a-z0-9-]+)?\\.vercel\\.app$`, 'i');
         }
       } catch {}
       return null;
@@ -65,7 +66,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(clerkMiddleware());
 
+app.use('/api/favorites', favoriteRoutes);
 app.use('/api/games', gameRoutes);
 app.use('/api/hardware-logs', platformHardwareRoutes);
 

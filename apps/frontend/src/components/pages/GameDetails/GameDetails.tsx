@@ -1,4 +1,5 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
+import { useAuth } from '@clerk/clerk-react';
 import { useParams, Link } from 'react-router-dom';
 import { type VideoGame } from '../../../data/video_games';
 import { formatReleaseDate } from '../../../services/gameService';
@@ -23,6 +24,7 @@ type GameDetailsProps = {
  * @returns The GameDetails component.
  */
 function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
+  const { getToken, isSignedIn } = useAuth();
   const { id } = useParams<{ id: string }>();
   const gameId = Number(id);
   const [game, setGame] = useState<VideoGame | null>(null); // used to store the loaded game details
@@ -89,6 +91,11 @@ function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
       return;
     }
 
+    if (!isSignedIn) {
+      setError('You must sign in before editing a game card.');
+      return;
+    }
+
     setIsSaving(true);
     setError(null);
 
@@ -110,7 +117,7 @@ function GameDetails({ favorites = [], onToggleFavorite }: GameDetailsProps) {
           .map((value) => value.trim())
           .filter(Boolean),
         multiplayer: formData.multiplayer,
-      });
+      }, getToken);
 
       setGame(updated);
       setIsEditing(false);

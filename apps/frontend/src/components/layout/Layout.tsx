@@ -5,6 +5,7 @@ import Footer from "./footer/Footer";
 
 interface LayoutProps {
   isEditing?: boolean;
+  isSaving?: boolean;
   onToggleEdit?: () => void;
 }
 
@@ -16,13 +17,13 @@ interface LayoutProps {
  * @param onToggleEdit - Function to toggle editing mode.
  * @returns The layout component wrapping all pages.
  */
-function Layout({ isEditing = false, onToggleEdit }: LayoutProps) {
+function Layout({ isEditing = false, isSaving = false, onToggleEdit }: LayoutProps) {
   const location = useLocation();
   const isGameDetailsPage = location.pathname.startsWith("/game/");
 
   return (
     <div className="flex flex-col min-h-screen bg-neutral-950">
-      <Nav isEditing={isEditing} onToggleEdit={onToggleEdit} />
+      <Nav isEditing={isEditing} isSaving={isSaving} onToggleEdit={onToggleEdit} />
       {/* removes header on game details page for a cleaner look */}
       <div className={`max-w-6xl mx-auto px-4 flex-1 w-full ${isGameDetailsPage ? 'pb-8' : 'py-8'}`}>
         {!isGameDetailsPage && <Header />}

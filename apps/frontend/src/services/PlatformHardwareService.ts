@@ -1,4 +1,5 @@
 import { type CreateHardwareLogInput, type HardwareLog } from "../data/PlatformHardware";
+import type { TokenProvider } from '../apis/client';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -18,11 +19,14 @@ const HardwareService = {
     return await response.json();
   },
 
-  submitLog: async (logData: CreateHardwareLogInput): Promise<void> => {
+  submitLog: async (logData: CreateHardwareLogInput, getToken?: TokenProvider): Promise<void> => {
+    const token = getToken ? await getToken() : null;
+
     const response = await fetch(`${API_URL}/api/hardware-logs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify(logData),
     });
@@ -33,11 +37,14 @@ const HardwareService = {
     }
   },
 
-  updateLog: async (id: number, logData: Partial<CreateHardwareLogInput>): Promise<void> => {
+  updateLog: async (id: number, logData: Partial<CreateHardwareLogInput>, getToken?: TokenProvider): Promise<void> => {
+    const token = getToken ? await getToken() : null;
+
     const response = await fetch(`${API_URL}/api/hardware-logs/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: JSON.stringify(logData),
     });
@@ -45,6 +52,22 @@ const HardwareService = {
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || "Failed to update log.");
+    }
+  },
+
+  deleteLog: async (id: number, getToken?: TokenProvider): Promise<void> => {
+    const token = getToken ? await getToken() : null;
+
+    const response = await fetch(`${API_URL}/api/hardware-logs/${id}`, {
+      method: "DELETE",
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to delete log.");
     }
   },
 };

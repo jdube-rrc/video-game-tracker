@@ -89,22 +89,66 @@ All team members
 ### Service Layer Functionality
 All team members
 
-## Sprint 4
+## Local Setup
 
-### Back-end App Initialization
-Jared
+Follow these steps to set up the Video Game Tracker application locally.
 
-### Development SQL Database
-Jared
+### 1. Prerequisites
+- [Node.js](https://nodejs.org/) installed
+- A [Clerk](https://clerk.com/) account for authentication
+- A PostgreSQL database (e.g., [Neon](https://neon.tech/))
 
-### Prisma Setup
-Rayn and Jared
+### 2. Environment Variables
+You will need to set up environment variables for both the frontend and backend applications to connect to Clerk and your database. 
 
-### Back-end CORS Setup
-Jared
+#### Clerk API Keys
+To link your application to Clerk for authentication, you need to obtain your publishable and secret API keys:
+1. Navigate to the [Clerk Dashboard](https://dashboard.clerk.com/) and go to **Configure > API Keys**.
+2. **For the Backend**: In the "Quick Copy" section, click the framework dropdown and select **Express**. Copy the `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`.
+3. **For the Frontend**: Switch the "Quick Copy" dropdown framework to **React**. Copy the `VITE_CLERK_PUBLISHABLE_KEY`.
 
-### Resource frontend request, endpoint, schema and persistence for video game data
-Jared
+#### Backend Environment (`apps/backend/.env`)
+Create a file named `.env` in the `apps/backend` directory and add the following:
+```env
+PORT=3001
+FRONTEND_URL=http://localhost:5173
 
-### Resource frontend request, endpoint, schema and persistence for hardware logs
-Rayn
+# Database configuration (Replace with your actual strings, e.g., from Neon PostgreSQL)
+DATABASE_URL="<your-postgresql-connection-string>"
+DIRECT_URL="<your-postgresql-direct-connection-string>"
+
+# Clerk configuration (From the Clerk "Express" Quick Copy)
+CLERK_PUBLISHABLE_KEY="<your-clerk-publishable-key>"
+CLERK_SECRET_KEY="<your-clerk-secret-key>"
+```
+
+#### Frontend Environment (`apps/frontend/.env`)
+Create a file named `.env` in the `apps/frontend` directory and add the following:
+```env
+VITE_API_BASE_URL=http://localhost:3001
+FRONTEND_URL=http://localhost:5173
+
+# Clerk configuration (From the Clerk "React" Quick Copy)
+VITE_CLERK_PUBLISHABLE_KEY="<your-clerk-publishable-key>"
+```
+### 3. Installation
+From the root directory of the project, install the dependencies for all workspaces:
+```bash
+npm install
+```
+
+### 4. Database Setup
+Once your `DATABASE_URL` and `DIRECT_URL` are configured in the backend `.env` file, deploy the database schema using Prisma. From the root directory, run:
+```bash
+cd apps/backend
+npx prisma migrate deploy
+cd ../..
+```
+
+### 5. Running the Application
+From the root directory, start both the frontend and backend development servers concurrently:
+```bash
+npm run dev
+```
+
+The frontend will be accessible at `http://localhost:5173` and the backend will be running at `http://localhost:3001`.

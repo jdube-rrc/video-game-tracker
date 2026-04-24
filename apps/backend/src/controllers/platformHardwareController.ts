@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getAuth } from '@clerk/express';
 import hardwareService from '../services/platformHardwareService.js';
 
 /**
@@ -32,7 +33,12 @@ export const getLogs = async (req: Request, res: Response): Promise<void> => {
  */
 export const submitLog = async (req: Request, res: Response): Promise<void> => {
     try {
-        const newLog = await hardwareService.submitLog(req.body);
+        const { userId } = getAuth(req);
+        
+        const newLog = await hardwareService.submitLog({
+            ...req.body,
+            userId: userId
+        });
         
         res.status(201).json(newLog);
     } catch (error: any) {
@@ -54,6 +60,22 @@ export const updateLog = async (req: Request, res: Response): Promise<void> => {
         const id = parseInt(req.params.id, 10);
         if (isNaN(id)) {
             res.status(400).json({ message: "Invalid log ID format." });
+            return;
+        }
+
+        const { userId, sessionClaims } = getAuth(req);
+        const role = (sessionClaims?.metadata as any)?.role;
+
+        // Fetch log to check ownership
+        const log = await hardwareService.getLogById(id);
+        if (!log) {
+            res.status(404).json({ message: "Hardware log not found." });
+            return;
+        }
+
+        // Authorization check: User must be owner OR admin
+        if (log.userId !== userId && role !== 'admin') {
+            res.status(403).json({ message: "Forbidden: You do not have permission to edit this log." });
             return;
         }
 
@@ -113,6 +135,22 @@ export const deleteLog = async (req: Request, res: Response): Promise<void> => {
         const id = parseInt(req.params.id, 10);
         if (isNaN(id)) {
             res.status(400).json({ message: "Invalid log ID format." });
+            return;
+        }
+
+        const { userId, sessionClaims } = getAuth(req);
+        const role = (sessionClaims?.metadata as any)?.role;
+
+        // Fetch log to check ownership
+        const log = await hardwareService.getLogById(id);
+        if (!log) {
+            res.status(404).json({ message: "Hardware log not found." });
+            return;
+        }
+
+        // Authorization check: User must be owner OR admin
+        if (log.userId !== userId && role !== 'admin') {
+            res.status(403).json({ message: "Forbidden: You do not have permission to delete this log." });
             return;
         }
 

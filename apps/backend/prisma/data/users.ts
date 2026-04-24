@@ -1,24 +1,6 @@
-/**
- * Defines the structure of a user profile within the application.
- * A user profile represents a player's account and preferences.
- */
-export interface UserProfile {
-  id: string; // Clerk UUID or placeholder for test data
-  username: string;
-  email: string;
-  tagline: string;
-  favoriteGenres: string[];
-  createdAt: string;
-}
-
-/**
- * Test data: array of 10+ sample user profiles.
- * This data is used by the userProfileRepository instead of making external API calls.
- * In a future sprint, this will be replaced with database queries.
- */
-export const userProfiles: UserProfile[] = [
+export const fauxUsers = [
   {
-    id: '1',
+    id: 'user_2nB0v5gX6hJ9kL2mP4qR8sT1uVw',
     username: 'PixelRanger',
     email: 'pixel@example.com',
     tagline: 'Co-op first, speedruns second.',
@@ -26,15 +8,15 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-11-15',
   },
   {
-    id: '2',
+    id: 'user_3aC7d8eF9gH0iJ1kL2mN3oP4qR5',
     username: 'SilentHunter',
     email: 'silent@example.com',
     tagline: 'Stealth games are life.',
-    favoriteGenres: ['Stealth', 'Thriller'],
+    favoriteGenres: ['Action', 'Adventure'], // Changed to match existing genres in seed.ts
     createdAt: '2025-10-20',
   },
   {
-    id: '3',
+    id: 'user_4bS8t9uV0vW1xX2yY3zZ4aA5bB6',
     username: 'CasualGamer',
     email: 'casual@example.com',
     tagline: 'Here for the vibes.',
@@ -42,7 +24,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-09-05',
   },
   {
-    id: '4',
+    id: 'user_5cT9uV0vW1xX2yY3zZ4aA5bB6cC',
     username: 'CompetitivePro',
     email: 'competitive@example.com',
     tagline: 'Rank 1 or bust.',
@@ -50,7 +32,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-08-12',
   },
   {
-    id: '5',
+    id: 'user_6dU0vW1xX2yY3zZ4aA5bB6cC7dD',
     username: 'StoryDiver',
     email: 'story@example.com',
     tagline: 'Plot twists > graphics.',
@@ -58,7 +40,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-07-30',
   },
   {
-    id: '6',
+    id: 'user_7eV1xX2yY3zZ4aA5bB6cC7dD8eE',
     username: 'NoLifeGamer',
     email: 'nolife@example.com',
     tagline: 'What is sleep?',
@@ -66,15 +48,15 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-06-18',
   },
   {
-    id: '7',
+    id: 'user_8fW2yY3zZ4aA5bB6cC7dD8eE9fF',
     username: 'RetroFan',
     email: 'retro@example.com',
     tagline: 'Pixel art > ultra-realistic.',
-    favoriteGenres: ['Platformer', 'Arcade'],
+    favoriteGenres: ['Platformer'],
     createdAt: '2025-05-22',
   },
   {
-    id: '8',
+    id: 'user_9gX3zZ4aA5bB6cC7dD8eE9fF0gG',
     username: 'CasualStreamer',
     email: 'streamer@example.com',
     tagline: 'Making games look easy since 2024.',
@@ -82,15 +64,15 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-04-10',
   },
   {
-    id: '9',
+    id: 'user_0hY4aA5bB6cC7dD8eE9fF0gG1hH',
     username: 'PuzzleMaster',
     email: 'puzzle@example.com',
     tagline: 'Brain > brawn.',
-    favoriteGenres: ['Puzzle', 'Turn-based'],
+    favoriteGenres: ['Puzzle'],
     createdAt: '2025-03-05',
   },
   {
-    id: '10',
+    id: 'user_1iZ5bB6cC7dD8eE9fF0gG1hH2iI',
     username: 'SoulsLikeEnthusiast',
     email: 'soulslike@example.com',
     tagline: 'Pain is temporary, victory is forever.',
@@ -98,7 +80,7 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-02-14',
   },
   {
-    id: '11',
+    id: 'user_2jA6cC7dD8eE9fF0gG1hH2iI3jJ',
     username: 'IndieGameLover',
     email: 'indie@example.com',
     tagline: 'Supporting small devs with big dreams.',
@@ -106,4 +88,3 @@ export const userProfiles: UserProfile[] = [
     createdAt: '2025-01-28',
   },
 ];
-
